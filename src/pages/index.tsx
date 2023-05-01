@@ -1,4 +1,4 @@
-import { SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignIn, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { type NextPage } from 'next';
 import Head from 'next/head';
 
@@ -13,7 +13,7 @@ const Home: NextPage = () => {
       <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c]">
         <div>
           <SignedOut>
-            <SignInButton />
+            <SignIn />
           </SignedOut>
           <SignedIn>
             <UserButton />
