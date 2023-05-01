@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@clerk/nextjs": "^4.15.0",
+    "@clerk/themes": "^1.6.3",
     "@prisma/client": "^4.11.0",
+    "@t3-oss/env-nextjs": "^0.2.2",
     "@tanstack/react-query": "^4.28.0",
     "@trpc/client": "^10.18.0",
     "@trpc/next": "^10.18.0",
