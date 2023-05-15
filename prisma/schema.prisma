@@ -6,13 +6,56 @@ generator client {
 }
 
 datasource db {
-    provider     = "mysql"
-    url          = env("DATABASE_URL")
-    relationMode = "prisma"
+    provider          = "postgresql"
+    url               = env("PSQL_PRISMA_URL")
+    directUrl         = env("PSQL_URL_NON_POOLING")
+    shadowDatabaseUrl = env("PSQL_URL_NON_POOLING")
 }
 
-model Example {
-    id        String   @id @default(cuid())
+model User {
+    id        Int    @id @default(autoincrement())
+    clerkId   String @unique
+    name      String
+    imageUrl  String
+    role      Role
+    songs     Song[]
+    following User[] @relation("follows")
+    followers User[] @relation("follows")
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
+}
+
+model Song {
+    id       Int      @id @default(autoincrement())
+    title    String
+    authors  String[]
+    album    String
+    imageUrl String
+    uri      String
+    date     DateTime @default(now())
+    theme    Theme    @relation(fields: [themeId], references: [id])
+    user     User     @relation(fields: [userId], references: [id])
+
+    themeId Int
+    userId  Int
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Theme {
+    id        Int       @id @default(autoincrement())
+    content   String    @unique
+    date      DateTime? @unique
+    available Boolean   @default(true)
+    songs     Song[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+enum Role {
+    USER
+    ADMIN
 }
