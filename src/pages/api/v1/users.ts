@@ -7,7 +7,7 @@ import { prisma } from '~/server/db';
 
 const webhookSecret: string = env.CLERK_WEBHOOK_SECRET_KEY;
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
   let event: UserWebhookEvent | null = null;
@@ -27,7 +27,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case 'user.created':
     case 'user.updated':
       const { id, profile_image_url, username, first_name } = event.data;
-      const user = await prisma.user.upsert({
+      void prisma.user.upsert({
         where: { clerkId: id },
         update: { imageUrl: profile_image_url },
         create: {
@@ -36,7 +36,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           name: username || first_name,
         },
       });
-      console.log(user);
       return res.status(201).end();
     case 'user.deleted':
       void prisma.user.delete({ where: { clerkId: event.data.id } });
