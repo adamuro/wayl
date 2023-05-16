@@ -1,7 +1,8 @@
 import type { UserWebhookEvent } from '@clerk/clerk-sdk-node';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { Webhook } from 'svix';
-const webhookSecret: string = process.env.WEBHOOK_SECRET || '';
+import { env } from '~/env.mjs';
+const webhookSecret: string = env.CLERK_WEBHOOK_SECRET_KEY;
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let event: UserWebhookEvent | null = null;

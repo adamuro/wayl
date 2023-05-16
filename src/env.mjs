@@ -3,7 +3,7 @@ import { createEnv } from '@t3-oss/env-nextjs';
 
 export const env = createEnv({
   server: {
-    NODE_ENV: z.string().regex(/production|development|test/),
+    NODE_ENV: z.enum(['production', 'development', 'test']),
     CLERK_SECRET_KEY: z.string(),
     CLERK_WEBHOOK_SECRET_KEY: z.string(),
     POSTGRES_URL: z.string(),
