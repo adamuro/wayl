@@ -7,7 +7,7 @@ import { prisma } from '~/server/db';
 
 const webhookSecret: string = env.CLERK_WEBHOOK_SECRET_KEY;
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') return res.status(405).end();
 
   let event: UserWebhookEvent | null = null;
@@ -26,9 +26,8 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (event.type) {
     case 'user.created':
     case 'user.updated':
-      console.log('User created or updated');
       const { id, profile_image_url, username, first_name } = event.data;
-      void prisma.user.upsert({
+      const user = await prisma.user.upsert({
         where: { clerkId: id },
         update: { imageUrl: profile_image_url },
         create: {
@@ -37,11 +36,11 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
           name: username || first_name,
         },
       });
-      return res.status(201).end();
+
+      return res.status(201).json(user);
     case 'user.deleted':
-      console.log('User deleted');
-      void prisma.user.delete({ where: { clerkId: event.data.id } });
-      return res.status(200).end();
+      const deleted = await prisma.user.delete({ where: { clerkId: event.data.id } });
+      return res.status(200).json(deleted);
     default:
       return res.status(400).send('Unsupported event type.');
   }
