@@ -26,6 +26,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
   switch (event.type) {
     case 'user.created':
     case 'user.updated':
+      console.log('User created or updated');
       const { id, profile_image_url, username, first_name } = event.data;
       void prisma.user.upsert({
         where: { clerkId: id },
@@ -38,6 +39,7 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
       });
       return res.status(201).end();
     case 'user.deleted':
+      console.log('User deleted');
       void prisma.user.delete({ where: { clerkId: event.data.id } });
       return res.status(200).end();
     default:
