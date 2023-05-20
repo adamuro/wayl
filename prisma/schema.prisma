@@ -16,7 +16,7 @@ model User {
     id        Int    @id @default(autoincrement())
     clerkId   String @unique
     name      String
-    imageUrl  String
+    avatarUrl String
     songs     Song[]
     roles     Role[] @default([USER])
     following User[] @relation("follows")

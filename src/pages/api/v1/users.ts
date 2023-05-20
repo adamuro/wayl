@@ -30,10 +30,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { id, profile_image_url, username, first_name } = event.data;
       const user = await prisma.user.upsert({
         where: { clerkId: id },
-        update: { imageUrl: profile_image_url },
+        update: { avatarUrl: profile_image_url },
         create: {
           clerkId: id,
-          imageUrl: profile_image_url,
+          avatarUrl: profile_image_url,
           name: username || first_name,
         },
       });
