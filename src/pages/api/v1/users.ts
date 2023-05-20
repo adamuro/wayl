@@ -19,8 +19,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     event = wh.verify(payloadString, svixHeaders) as UserWebhookEvent;
   } catch (error) {
-    if (error instanceof WebhookVerificationError) return res.status(400).send(error.message);
-    return res.status(400).send('Unexpected webhook verification error.');
+    if (error instanceof WebhookVerificationError)
+      return res.status(400).json({ message: error.message });
+    return res.status(400).json({ message: 'Unexpected error during webhook verification.' });
   }
 
   switch (event.type) {
@@ -42,7 +43,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const deleted = await prisma.user.delete({ where: { clerkId: event.data.id } });
       return res.status(200).json(deleted);
     default:
-      return res.status(400).send('Unsupported event type.');
+      return res.status(400).json({ error: 'Unsupported event type.' });
   }
 }
 
