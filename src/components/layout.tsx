@@ -1,13 +1,13 @@
 import { UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
-import { useCallback, useRef, useState } from 'react';
 import type { PropsWithChildren } from 'react';
-
+import { useCallback, useRef, useState } from 'react';
 import { useWindowWidth } from '~/hooks/useWindowWidth';
 
 export const PageLayout = (props: PropsWithChildren) => {
-  const [userButtonX, setUserButtonX] = useState(0);
   const width = useWindowWidth();
+
+  const [userButtonX, setUserButtonX] = useState(0);
   const userButtonRef = useRef<HTMLLIElement>(null);
   const handleUserButtonHover = useCallback(() => {
     const rect = userButtonRef.current?.getBoundingClientRect();
