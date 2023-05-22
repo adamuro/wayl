@@ -6,7 +6,13 @@ import { api } from '~/utils/api';
 
 const MyApp: AppType = ({ Component, pageProps }) => {
   return (
-    <ClerkProvider {...pageProps} appearance={{ baseTheme: dark }}>
+    <ClerkProvider
+      {...pageProps}
+      appearance={{
+        baseTheme: dark,
+        elements: { footerAction__signIn: 'hidden' },
+      }}
+    >
       <Component {...pageProps} />
     </ClerkProvider>
   );
