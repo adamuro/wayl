@@ -14,9 +14,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const wh = new Webhook(webhookSecret);
   const payloadString = JSON.stringify(req.body);
-  const svixHeaders = getSvixHeaders(req.headers);
 
   try {
+    const svixHeaders = getSvixHeaders(req.headers);
     event = wh.verify(payloadString, svixHeaders) as UserWebhookEvent;
   } catch (error) {
     if (error instanceof WebhookVerificationError)
@@ -48,9 +48,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 function getSvixHeaders(headers: IncomingHttpHeaders) {
+  const id = headers['svix-id'];
+  const timestamp = headers['svix-timestamp'];
+  const signature = headers['svix-signature'];
+
+  if (typeof id !== 'string')
+    throw new WebhookVerificationError(`Id is not ${id ? 'a string' : 'provided'}`);
+  if (typeof timestamp !== 'string')
+    throw new WebhookVerificationError(`Timestamp is not ${timestamp ? 'a string' : 'provided'}`);
+  if (typeof signature !== 'string')
+    throw new WebhookVerificationError(`Signature is not ${signature ? 'a string' : 'provided'}`);
+
   return {
-    'svix-id': headers['svix-id'] as string,
-    'svix-timestamp': headers['svix-timestamp'] as string,
-    'svix-signature': headers['svix-signature'] as string,
+    'svix-id': id,
+    'svix-timestamp': timestamp,
+    'svix-signature': signature,
   };
 }
