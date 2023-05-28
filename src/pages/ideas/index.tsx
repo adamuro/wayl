@@ -1,7 +1,7 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
 
-const Home: NextPage = () => {
+const Ideas: NextPage = () => {
   return (
     <>
       <Head>
@@ -9,9 +9,9 @@ const Home: NextPage = () => {
         <meta name="wayl" content="What are you listening to?" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen">Feed</main>
+      <main className="h-screen">Ideas</main>
     </>
   );
 };
 
-export default Home;
+export default Ideas;

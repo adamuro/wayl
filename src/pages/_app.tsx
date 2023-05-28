@@ -1,6 +1,7 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import { type AppType } from 'next/app';
+import { PageLayout } from '~/components/layout';
 import '~/styles/globals.css';
 import { api } from '~/utils/api';
 
@@ -12,8 +13,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         baseTheme: dark,
         elements: { footerAction__signIn: 'hidden' },
       }}
+      signInUrl="/"
     >
-      <Component {...pageProps} />
+      <PageLayout>
+        <Component {...pageProps} />
+      </PageLayout>
     </ClerkProvider>
   );
 };
