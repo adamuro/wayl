@@ -9,7 +9,7 @@ const Ideas: NextPage = () => {
         <meta name="wayl" content="What are you listening to?" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen">Ideas</main>
+      <main>Ideas</main>
     </>
   );
 };

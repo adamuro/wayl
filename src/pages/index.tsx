@@ -9,7 +9,7 @@ const Home: NextPage = () => {
         <meta name="wayl" content="What are you listening to?" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className="h-screen">Feed</main>
+      <main>Feed</main>
     </>
   );
 };
