@@ -5,8 +5,8 @@ import { useCallback, useRef, useState } from 'react';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
 import { FaLightbulb, FaRegLightbulb } from 'react-icons/fa';
 import { useDevice } from '~/hooks/device';
-import { Desktop } from './device';
 import { Path } from './path';
+import Head from 'next/head';
 
 const Navigation = () => {
   const device = useDevice();
@@ -19,12 +19,12 @@ const Navigation = () => {
   }, [userButtonRef]);
 
   return (
-    <nav className="sticky top-0 h-screen flex-auto border-r border-slate-50 mobile:flex-grow-0 desktop:w-1">
-      <ul className="flex flex-col gap-1 p-2 text-xl">
+    <nav className="sticky top-0 h-screen flex-1 flex-col items-end">
+      <ul className="ml-auto flex w-fit flex-col gap-1 p-2 text-xl">
         <li
           ref={userButtonRef}
           onPointerEnter={handleUserButtonHover}
-          className="rounded-lg p-2 transition-all hover:bg-neutral-900"
+          className="flex w-fit rounded-lg p-2 transition-all hover:bg-neutral-900"
         >
           <UserButton
             showName={device === 'desktop'}
@@ -42,34 +42,36 @@ const Navigation = () => {
             }}
           />
         </li>
-        <Link href="/">
-          <li className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900">
+        <li>
+          <Link
+            href="/"
+            className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900"
+          >
             <Path is="/">
               <AiFillHome className="text-3xl" />
-              <Desktop>
-                <span className="font-medium">Home</span>
-              </Desktop>
+              <span className="font-medium mobile:hidden">Home</span>
             </Path>
             <Path not="/">
               <AiOutlineHome className="text-3xl" />
-              <Desktop>Home</Desktop>
+              <span className="mobile:hidden">Home</span>
             </Path>
-          </li>
-        </Link>
-        <Link href="/ideas">
-          <li className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900">
+          </Link>
+        </li>
+        <li>
+          <Link
+            href="/ideas"
+            className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900"
+          >
             <Path is="/ideas">
               <FaLightbulb className="text-3xl" />
-              <Desktop>
-                <span className="font-medium">Ideas</span>
-              </Desktop>
+              <span className="font-medium mobile:hidden">Ideas</span>
             </Path>
             <Path not="/ideas">
               <FaRegLightbulb className="text-3xl" />
-              <Desktop>Ideas</Desktop>
+              <span className="mobile:hidden">Ideas</span>
             </Path>
-          </li>
-        </Link>
+          </Link>
+        </li>
       </ul>
     </nav>
   );
@@ -78,17 +80,23 @@ const Navigation = () => {
 export const PageLayout = (props: PropsWithChildren) => {
   return (
     <>
+      <Head>
+        <title>Wayl</title>
+        <meta name="wayl" content="What are you listening to?" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <SignedOut>
         <div className="flex h-screen items-center justify-center">
           <SignIn />
         </div>
       </SignedOut>
       <SignedIn>
-        <div className="flex h-full items-center justify-center">
-          <div className="flex w-full max-w-4xl flex-row">
-            <Navigation />
-            <div className="w-80 flex-auto flex-col">{props.children}</div>
-          </div>
+        <div className="flex h-full flex-row justify-center">
+          <Navigation />
+          <main className="w-full max-w-2xl border-x border-neutral-700 mobile:flex-auto desktop:min-w-2xl desktop:flex-1">
+            {props.children}
+          </main>
+          <div className="flex-1"></div>
         </div>
       </SignedIn>
     </>

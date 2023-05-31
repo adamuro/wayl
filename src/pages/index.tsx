@@ -1,15 +1,115 @@
 import type { NextPage } from 'next';
-import Head from 'next/head';
 
 const Home: NextPage = () => {
   return (
     <>
-      <Head>
-        <title>Wayl</title>
-        <meta name="wayl" content="What are you listening to?" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main>Feed</main>
+      <ul>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+        <li className="border-b border-neutral-700 p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi repellendus
+          aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae eligendi
+          delectus minima earum voluptas tempore corrupti iusto.
+        </li>
+      </ul>
     </>
   );
 };

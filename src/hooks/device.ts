@@ -12,7 +12,7 @@ export const useWindowWidth = () => {
   return width;
 };
 
-export const DEVICE_WIDTH_BOUNDARY = 896;
+export const DEVICE_WIDTH_BOUNDARY = 1152;
 export const useDevice = () => {
   const width = useWindowWidth();
 
