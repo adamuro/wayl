@@ -1,29 +1,25 @@
 import { SignIn, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import Head from 'next/head';
 import Link from 'next/link';
-import type { PropsWithChildren } from 'react';
-import { useCallback, useRef, useState } from 'react';
+import { useRef, type PropsWithChildren } from 'react';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
 import { FaLightbulb, FaRegLightbulb } from 'react-icons/fa';
 import { useDevice } from '~/hooks/device';
+import { useRefPositionOnHover } from '~/hooks/position';
 import { Path } from './path';
-import Head from 'next/head';
 
 const Navigation = () => {
   const device = useDevice();
 
-  const [userButtonX, setUserButtonX] = useState(0);
   const userButtonRef = useRef<HTMLLIElement>(null);
-  const handleUserButtonHover = useCallback(() => {
-    const rect = userButtonRef.current?.getBoundingClientRect();
-    setUserButtonX(rect?.x || 0);
-  }, [userButtonRef]);
+  const { position, updatePosition } = useRefPositionOnHover(userButtonRef);
 
   return (
     <nav className="sticky top-0 h-screen flex-1 flex-col items-end">
       <ul className="ml-auto flex w-fit flex-col gap-1 p-2 text-xl">
         <li
           ref={userButtonRef}
-          onPointerEnter={handleUserButtonHover}
+          onPointerEnter={updatePosition}
           className="flex w-fit rounded-lg p-2 transition-all hover:bg-neutral-900"
         >
           <UserButton
@@ -35,7 +31,7 @@ const Navigation = () => {
                 userButtonOuterIdentifier: 'font-sans font-medium text-xl cl-userButtonTrigger',
                 userButtonBox: 'flex-row-reverse gap-3',
                 userButtonPopoverCard: {
-                  left: `${userButtonX}px !important`,
+                  left: `${position.x}px !important`,
                   borderRadius: '0.5rem',
                 },
               },
