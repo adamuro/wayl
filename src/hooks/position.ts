@@ -2,7 +2,7 @@ import { type RefObject, useCallback, useEffect, useState } from 'react';
 
 const initialPosition = { x: 0, y: 0 };
 
-export const useRefPositionOnHover = (ref: RefObject<HTMLLIElement>) => {
+export const useRefPosition = (ref: RefObject<HTMLLIElement>) => {
   const [position, setPosition] = useState(initialPosition);
 
   const updatePosition = useCallback(() => {

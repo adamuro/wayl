@@ -5,14 +5,14 @@ import { useRef, type PropsWithChildren } from 'react';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
 import { FaLightbulb, FaRegLightbulb } from 'react-icons/fa';
 import { useDevice } from '~/hooks/device';
-import { useRefPositionOnHover } from '~/hooks/position';
+import { useRefPosition } from '~/hooks/position';
 import { Path } from './path';
 
 const Navigation = () => {
   const device = useDevice();
 
   const userButtonRef = useRef<HTMLLIElement>(null);
-  const { position, updatePosition } = useRefPositionOnHover(userButtonRef);
+  const { position, updatePosition } = useRefPosition(userButtonRef);
 
   return (
     <nav className="sticky top-0 h-screen flex-1 flex-col items-end">
