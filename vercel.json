@@ -2,7 +2,7 @@
   "crons": [
     {
       "path": "/jobs/theme",
-      "schedule": "* * * * *"
+      "schedule": "25 15 * * *"
     }
   ]
 }
