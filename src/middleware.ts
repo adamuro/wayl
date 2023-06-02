@@ -1,8 +1,7 @@
-import { withClerkMiddleware } from '@clerk/nextjs/server';
-import { NextResponse } from 'next/server';
+import { authMiddleware } from '@clerk/nextjs';
 
-export default withClerkMiddleware(() => {
-  return NextResponse.next();
+export default authMiddleware({
+  publicRoutes: ['/api/cron/:job'],
 });
 
 export const config = {
