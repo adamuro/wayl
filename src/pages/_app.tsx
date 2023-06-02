@@ -13,7 +13,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         baseTheme: dark,
         elements: { footerAction__signIn: 'hidden' },
       }}
-      signInUrl="/"
     >
       <PageLayout>
         <Component {...pageProps} />
