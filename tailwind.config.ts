@@ -1,12 +1,18 @@
 import { type Config } from 'tailwindcss';
+import colors from 'tailwindcss/colors';
 
 export default {
   content: ['./src/**/*.{js,ts,jsx,tsx}'],
   theme: {
+    colors: {
+      transparent: 'transparent',
+      current: 'currentColor',
+      black: colors.black,
+      white: colors.white,
+      neutral: colors.neutral,
+      teal: colors.teal,
+    },
     extend: {
-      maxWidth: {
-        '2xs': '16rem',
-      },
       minWidth: {
         xs: '20rem',
         sm: '24rem',
@@ -14,9 +20,9 @@ export default {
         lg: '32rem',
         xl: '36rem',
         '2xl': '40rem',
-        half: '50vw',
-        'scr-40': '40vw',
-        'scr-30': '30vw',
+      },
+      maxWidth: {
+        '2xs': '16rem',
       },
     },
     screens: {

@@ -33,7 +33,6 @@ model Song {
     album    String
     imageUrl String
     uri      String
-    date     DateTime @default(now())
     theme    Theme    @relation(fields: [themeId], references: [id])
     user     User     @relation(fields: [userId], references: [id])
 
@@ -49,6 +48,7 @@ model Theme {
     content   String    @unique
     date      DateTime? @unique
     available Boolean   @default(true)
+    active    Boolean   @default(false)
     songs     Song[]
 
     createdAt DateTime @default(now())

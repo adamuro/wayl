@@ -1,6 +1,7 @@
 import { ClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import { type AppType } from 'next/app';
+import Head from 'next/head';
 import { PageLayout } from '~/components/layout';
 import '~/styles/globals.css';
 import { api } from '~/utils/api';
@@ -14,6 +15,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         elements: { footerAction__signIn: 'hidden' },
       }}
     >
+      <Head>
+        <title>Wayl</title>
+        <meta name="wayl" content="What are you listening to?" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
       <PageLayout>
         <Component {...pageProps} />
       </PageLayout>
