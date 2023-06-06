@@ -14,6 +14,7 @@ export default {
     },
     extend: {
       minWidth: {
+        '2xs': '16rem',
         xs: '20rem',
         sm: '24rem',
         md: '28rem',
@@ -22,6 +23,9 @@ export default {
         '2xl': '40rem',
       },
       maxWidth: {
+        '2xs': '16rem',
+      },
+      width: {
         '2xs': '16rem',
       },
     },
