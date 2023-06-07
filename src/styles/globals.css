@@ -5,3 +5,31 @@
 body {
   @apply overflow-y-scroll bg-black text-neutral-50;
 }
+
+@layer utilities {
+  *::-webkit-scrollbar {
+    @apply w-1;
+  }
+
+  body::-webkit-scrollbar-track {
+    @apply bg-black;
+  }
+
+  *::-webkit-scrollbar-track {
+    @apply bg-neutral-900;
+  }
+
+  body::-webkit-scrollbar-thumb {
+    /* border-radius: 100vh; */
+    @apply rounded bg-neutral-700 transition-all duration-500;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    /* border-radius: 100vh; */
+    @apply rounded bg-teal-400 transition-all duration-500;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    @apply border-0 bg-teal-400;
+  }
+}

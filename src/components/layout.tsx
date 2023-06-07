@@ -22,7 +22,7 @@ const Navigation = () => {
           className="flex w-fit rounded-lg p-2 transition-all hover:bg-neutral-900"
         >
           <UserButton
-            showName={device === 'desktop'}
+            showName={device.desktop}
             afterSignOutUrl="/"
             appearance={{
               elements: {
@@ -38,7 +38,7 @@ const Navigation = () => {
             }}
           />
         </li>
-        <li>
+        <li title={device.mobile ? 'Home' : ''}>
           <Link
             href="/"
             className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900 hover:text-teal-100"
@@ -53,7 +53,7 @@ const Navigation = () => {
             </Path>
           </Link>
         </li>
-        <li>
+        <li title={device.mobile ? 'Ideas' : ''}>
           <Link
             href="/ideas"
             className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900 hover:text-teal-100"
@@ -84,7 +84,7 @@ export const PageLayout = (props: PropsWithChildren) => {
       <SignedIn>
         <div className="flex h-full flex-row justify-center">
           <Navigation />
-          <main className="w-full max-w-2xl border-x border-neutral-700 mobile:flex-auto desktop:min-w-2xl desktop:flex-1">
+          <main className="w-full max-w-2xl border-l border-neutral-700 mobile:flex-auto desktop:min-w-2xl desktop:flex-1">
             {props.children}
           </main>
           <aside className="flex-1"></aside>
