@@ -29,10 +29,9 @@ model User {
 model Song {
     id       Int      @id @default(autoincrement())
     title    String
-    authors  String[]
-    album    String
-    imageUrl String
     uri      String
+    imageUrl String?
+    authors  String[]
     theme    Theme    @relation(fields: [themeId], references: [id])
     user     User     @relation(fields: [userId], references: [id])
 

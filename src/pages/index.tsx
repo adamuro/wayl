@@ -1,7 +1,10 @@
 import type { NextPage } from 'next';
-import { useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
-import { IoPlay } from 'react-icons/io5';
+import Image from 'next/image';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { IoPause, IoPlay } from 'react-icons/io5';
 import { If } from '~/components/condition';
+import { LoadingSpinner } from '~/components/loading';
+import { useAudio } from '~/hooks/audio';
 import { api } from '~/utils/api';
 
 const SongsSkeleton = () => {
@@ -39,70 +42,108 @@ const Theme = () => {
   const [query, setQuery] = useState('');
   const [focus, setFocus] = useState(false);
   const [song, setSong] = useState<SpotifyApi.TrackObjectFull | null>(null);
-
   const theme = api.themes.getActive.useQuery();
   const songs = api.spotify.searchSongs.useQuery({ query }, { keepPreviousData: true });
-
-  /* TODO: Make this look pretty */
-  const message = useMemo(() => {
-    const content = theme.isLoading ? 'loading...' : theme.data?.content;
-    if (theme.isError) return 'Oops, something went wrong 💀';
-    return (
-      <>
-        {"Today's theme is"} <span className="text-teal-400">{content}</span>
-      </>
-    );
-  }, [theme]);
+  const userSong = api.users.current.getSongForActiveTheme.useQuery();
+  const createSong = api.songs.create.useMutation();
+  const audio = useAudio();
 
   const handleChangeQuery = (e: ChangeEvent<HTMLInputElement>) => {
     setSong(null);
     setQuery(e.target.value);
+    audio.pause();
+  };
+
+  const handleBlur = () => {
+    setFocus(false);
+    audio.pause();
   };
 
   const handleSelectSong = (song: SpotifyApi.TrackObjectFull) => {
     setSong(song);
     setQuery(song.name);
+    audio.pause();
+  };
+
+  const handlePreviewSong = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    song: SpotifyApi.TrackObjectFull,
+  ) => {
+    e.preventDefault();
+    e.stopPropagation();
+    e.nativeEvent.stopImmediatePropagation();
+
+    if (audio.current === song.id) return audio.switch();
+    audio.play(song);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(song?.id);
+    if (!song || !theme.data) return;
+    createSong.mutate({
+      title: song.name,
+      authors: song.artists.map((artist) => artist.name),
+      imageUrl: song.album.images.at(-1)?.url,
+      uri: song.uri,
+      themeId: theme.data.id,
+    });
+
+    void userSong.refetch().then(() => createSong.reset());
   };
 
   return (
     <section className="sticky top-0 z-50 bg-gradient-to-b from-black from-40% to-transparent p-4">
       <header className="flex flex-col items-center gap-6">
-        <h2 className="text-center text-3xl">{message}</h2>
-        <form
-          onSubmit={handleSubmit}
-          className="flex w-1/2 min-w-2xs rounded-lg border border-neutral-50 bg-black transition-colors focus-within:border-teal-400 hover:border-teal-400"
-        >
-          <input
-            type="text"
-            autoComplete="off"
-            placeholder="Search..."
-            value={query}
-            required
-            onFocus={() => setFocus(true)}
-            onBlur={() => setFocus(false)}
-            onChange={handleChangeQuery}
-            className="w-full bg-transparent p-2 text-neutral-50 outline-none transition-all focus:border-teal-400"
-          />
-          <button
-            disabled={!song}
-            title={song ? 'Post!' : 'Choose a song'}
-            className="p-2 text-xl transition-colors hover:text-teal-400 disabled:text-neutral-700"
+        <h2 className="text-center text-3xl">
+          <If cond={theme.isError}>{'Oops, something went wrong 💀'}</If>
+          <If cond={!theme.isError}>
+            {"Today's theme is "}
+            <span className="text-teal-400">
+              {theme.isLoading ? 'loading...' : theme.data?.content}
+            </span>
+          </If>
+        </h2>
+        <If cond={userSong.isFetched && !userSong.data}>
+          <form
+            onSubmit={handleSubmit}
+            className="flex w-1/2 min-w-2xs rounded-lg border border-neutral-50 bg-black transition-colors focus-within:border-teal-400 hover:border-teal-400"
           >
-            <IoPlay />
-          </button>
-        </form>
+            <input
+              type="text"
+              autoComplete="off"
+              placeholder="Search..."
+              value={query}
+              required
+              onFocus={() => setFocus(true)}
+              onBlur={handleBlur}
+              onChange={handleChangeQuery}
+              className="w-full bg-transparent p-2 text-neutral-50 outline-none transition-all focus:border-teal-400"
+            />
+            <button
+              disabled={!song || !theme.data}
+              title={song ? 'Post!' : 'Choose a song'}
+              className="p-2 pr-3 text-xl transition-colors hover:text-teal-400 disabled:text-neutral-700"
+            >
+              {createSong.isLoading || createSong.isSuccess ? <LoadingSpinner /> : <IoPlay />}
+            </button>
+          </form>
+        </If>
       </header>
       <If cond={focus && query}>
         <div className="relative flex w-full justify-center">
           <div className="absolute top-0"></div>
-          <If cond={songs.isFetching && !songs.data?.length}>
-            <SongsSkeleton />
+          <If cond={!songs.data?.length}>
+            <If cond={songs.isFetching}>
+              <SongsSkeleton />
+            </If>
+            <If cond={!songs.isFetching}>
+              <ul className="absolute top-0 flex max-h-64 w-1/2 min-w-2xs flex-col overflow-y-scroll rounded-lg bg-black outline outline-1 outline-teal-400">
+                <li className="flex cursor-pointer flex-col break-words px-4 py-2 transition-colors hover:bg-neutral-900 hover:text-teal-400">
+                  No results
+                </li>
+              </ul>
+            </If>
           </If>
           <If cond={songs.data?.length}>
             <ul className="absolute top-0 flex max-h-64 w-1/2 min-w-2xs flex-col overflow-y-scroll rounded-lg bg-black outline outline-1 outline-teal-400">
@@ -110,10 +151,35 @@ const Theme = () => {
                 <li
                   key={song.id}
                   onMouseDown={() => handleSelectSong(song)}
-                  className="flex cursor-pointer flex-col break-words px-4 py-2 transition-colors hover:bg-neutral-900 hover:text-teal-400"
+                  className="flex cursor-pointer items-center gap-4 py-2 pl-4 transition-colors hover:bg-neutral-900 hover:text-teal-400"
                 >
-                  {song.name}
-                  <span className="text-xs text-neutral-50">{song.artists[0]?.name}</span>
+                  <Image
+                    alt={`${song.name} album image`}
+                    src={song.album.images.at(-1)?.url || ''}
+                    width={36}
+                    height={36}
+                    className="h-9 w-9"
+                  />
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex flex-col break-words">
+                      <span className="leading-5">{song.name}</span>
+                      <span className="break-words text-xs text-neutral-50">
+                        {song.artists.map((artist) => artist.name).join(', ')}
+                      </span>
+                    </div>
+                    <button
+                      title={audio.playing && audio.current === song.id ? 'Pause' : 'Play'}
+                      onMouseDown={(e) => handlePreviewSong(e, song)}
+                      className="p-2 text-neutral-50 transition-colors hover:text-teal-400"
+                    >
+                      <If cond={audio.paused || audio.current !== song.id}>
+                        <IoPlay className="text-xl" />
+                      </If>
+                      <If cond={audio.playing && audio.current === song.id}>
+                        <IoPause className="text-xl" />
+                      </If>
+                    </button>
+                  </div>
                 </li>
               ))}
             </ul>
