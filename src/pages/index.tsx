@@ -43,7 +43,7 @@ const Theme = () => {
   const [focus, setFocus] = useState(false);
   const [song, setSong] = useState<SpotifyApi.TrackObjectFull | null>(null);
   const theme = api.themes.getActive.useQuery();
-  const songs = api.spotify.searchSongs.useQuery({ query }, { keepPreviousData: true });
+  const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
   const userSong = api.users.current.getSongForActiveTheme.useQuery();
   const createSong = api.songs.create.useMutation();
   const audio = useAudio();
@@ -168,6 +168,7 @@ const Theme = () => {
                       </span>
                     </div>
                     <button
+                      disabled={!song.preview_url}
                       title={audio.playing && audio.current === song.id ? 'Pause' : 'Play'}
                       onMouseDown={(e) => handlePreviewSong(e, song)}
                       className="p-2 text-neutral-50 transition-colors hover:text-teal-400"

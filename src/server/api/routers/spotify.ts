@@ -18,7 +18,7 @@ async function searchSongs(query: string): Promise<SpotifyApi.TrackObjectFull[]>
 }
 
 export const spotifyRouter = createTRPCRouter({
-  searchSongs: privateProcedure
+  getSongs: privateProcedure
     .input(z.object({ query: z.string() }))
     .query(async ({ input, ctx }) => {
       if (!input.query) return [];
