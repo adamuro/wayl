@@ -18,6 +18,11 @@ async function handler(req: NextApiRequest, res: NextApiResponse) {
   const id = (await getRandomAvailableTheme())?.id || (await getOldestTheme())?.id;
   if (!id) return res.status(500).json({ error: 'No themes in database.' });
 
+  await prisma.theme.updateMany({
+    where: { active: true },
+    data: { active: false },
+  });
+
   const theme = await prisma.theme.update({
     where: { id },
     data: {
