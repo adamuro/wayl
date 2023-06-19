@@ -4,39 +4,9 @@ import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { IoPause, IoPlay } from 'react-icons/io5';
 import { If } from '~/components/condition';
 import { LoadingSpinner } from '~/components/loading';
+import { SearchResultsSkeleton } from '~/components/skeleton';
 import { useAudio } from '~/hooks/audio';
 import { api } from '~/utils/api';
-
-const SongsSkeleton = () => {
-  return (
-    <ul className="absolute top-0 flex h-64 w-1/2 min-w-2xs flex-col overflow-y-scroll rounded-lg bg-black outline outline-1 outline-teal-400">
-      <li className="flex h-14 animate-pulse cursor-pointer flex-col gap-2 px-4 pb-2 pt-4 transition-colors hover:bg-neutral-900">
-        <div className="h-3 w-48 rounded-full bg-neutral-700"></div>
-        <div className="h-2 w-20 rounded-full bg-neutral-700"></div>
-      </li>
-      <li className="flex h-14 animate-pulse cursor-pointer flex-col gap-2 px-4 pb-2 pt-4 transition-colors hover:bg-neutral-900">
-        <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
-        <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
-      </li>
-      <li className="flex h-14 animate-pulse cursor-pointer flex-col gap-2 px-4 pb-2 pt-4 transition-colors hover:bg-neutral-900">
-        <div className="h-3 w-40 rounded-full bg-neutral-700"></div>
-        <div className="h-2 w-24 rounded-full bg-neutral-700"></div>
-      </li>
-      <li className="flex h-14 animate-pulse cursor-pointer flex-col gap-2 px-4 pb-2 pt-4 transition-colors hover:bg-neutral-900">
-        <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
-        <div className="h-2 w-12 rounded-full bg-neutral-700"></div>
-      </li>
-      <li className="flex h-14 animate-pulse cursor-pointer flex-col gap-2 px-4 pb-2 pt-4 transition-colors hover:bg-neutral-900">
-        <div className="h-3 w-40 rounded-full bg-neutral-700"></div>
-        <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
-      </li>
-      <li className="flex h-14 animate-pulse cursor-pointer flex-col gap-2 px-4 pb-2 pt-4 transition-colors hover:bg-neutral-900">
-        <div className="h-3 w-48 rounded-full bg-neutral-700"></div>
-        <div className="h-2 w-12 rounded-full bg-neutral-700"></div>
-      </li>
-    </ul>
-  );
-};
 
 const Home: NextPage = () => {
   const [query, setQuery] = useState('');
@@ -142,7 +112,7 @@ const Home: NextPage = () => {
             <div className="absolute top-0"></div>
             <If cond={!songs.data?.length}>
               <If cond={songs.isFetching}>
-                <SongsSkeleton />
+                <SearchResultsSkeleton />
               </If>
               <If cond={!songs.isFetching}>
                 <ul className="absolute top-0 flex max-h-64 w-1/2 min-w-2xs flex-col overflow-y-scroll rounded-lg bg-black outline outline-1 outline-teal-400">
