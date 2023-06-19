@@ -11,7 +11,7 @@ export const SearchResultsSkeleton = (props: SearchResultsSkeletonProps) => {
         return (
           <li
             key={i}
-            className="flex animate-pulse cursor-pointer items-center gap-4 px-4 pb-2 pt-4 transition-colors hover:bg-neutral-900"
+            className="flex animate-pulse cursor-pointer items-center gap-4 px-4 pb-2 pt-2 transition-colors hover:bg-neutral-900"
           >
             <div className="h-9 w-9 rounded-full bg-neutral-700"></div>
             <div className="flex flex-col justify-between gap-2">

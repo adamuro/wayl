@@ -6,6 +6,8 @@ const currentUserRouter = createTRPCRouter({
   getNotFollowedByName: privateProcedure
     .input(z.object({ name: z.string() }))
     .query(async ({ ctx, input }) => {
+      if (!input.name) return [];
+
       const user = await ctx.prisma.user.findUnique({ where: { clerkId: ctx.clerkId } });
       if (!user) throw new TRPCError({ code: 'CONFLICT' });
 
