@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useRef, type PropsWithChildren } from 'react';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
 import { FaLightbulb, FaRegLightbulb } from 'react-icons/fa';
+import { MdPeople, MdPeopleOutline } from 'react-icons/md';
 import { useDevice } from '~/hooks/device';
 import { useRefPosition } from '~/hooks/position';
 import { Path } from './path';
@@ -50,6 +51,21 @@ const Navigation = () => {
             <Path not="/">
               <AiOutlineHome className="text-3xl" />
               <span className="mobile:hidden">Home</span>
+            </Path>
+          </Link>
+        </li>
+        <li title={device.mobile ? 'Friends' : ''}>
+          <Link
+            href="/friends"
+            className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900 hover:text-teal-100"
+          >
+            <Path is="/friends">
+              <MdPeople className="text-3xl text-teal-400" />
+              <span className="font-medium text-teal-400 mobile:hidden">Friends</span>
+            </Path>
+            <Path not="/friends">
+              <MdPeopleOutline className="text-3xl" />
+              <span className="mobile:hidden">Friends</span>
             </Path>
           </Link>
         </li>

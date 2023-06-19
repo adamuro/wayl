@@ -19,7 +19,7 @@ const config = {
     defaultLocale: 'en',
   },
   images: {
-    domains: ['i.scdn.co'],
+    domains: ['i.scdn.co', 'images.clerk.dev', 'scontent-ord5-1.xx.fbcdn.net'],
   },
 };
 export default config;
