@@ -7,10 +7,14 @@ const currentUserRouter = createTRPCRouter({
     const user = await ctx.prisma.user.findUnique({ where: { clerkId: ctx.clerkId } });
     if (!user) throw new TRPCError({ code: 'CONFLICT' });
 
+    const theme = await ctx.prisma.theme.findFirst({ where: { active: true } });
+    if (!theme?.date) throw new TRPCError({ code: 'CONFLICT' });
+
     return ctx.prisma.song.findFirst({
       where: {
         userId: user.id,
         theme: { active: true },
+        createdAt: { gte: theme.date },
       },
     });
   }),
