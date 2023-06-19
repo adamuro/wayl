@@ -44,7 +44,7 @@ const Home: NextPage = () => {
   const [song, setSong] = useState<SpotifyApi.TrackObjectFull | null>(null);
   const theme = api.themes.getActive.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
-  const userSong = api.users.current.getSongForActiveTheme.useQuery();
+  const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
   const createSong = api.songs.create.useMutation();
   const audio = useAudio();
 

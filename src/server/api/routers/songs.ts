@@ -6,7 +6,6 @@ export const songsRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.song.findMany();
   }),
-
   create: privateProcedure
     .input(
       z.object({
@@ -36,4 +35,19 @@ export const songsRouter = createTRPCRouter({
         },
       });
     }),
+  getForCurrentUserAndTheme: privateProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({ where: { clerkId: ctx.clerkId } });
+    if (!user) throw new TRPCError({ code: 'CONFLICT' });
+
+    const theme = await ctx.prisma.theme.findFirst({ where: { active: true } });
+    if (!theme?.date) throw new TRPCError({ code: 'CONFLICT' });
+
+    return ctx.prisma.song.findFirst({
+      where: {
+        userId: user.id,
+        theme: { active: true },
+        createdAt: { gte: theme.date },
+      },
+    });
+  }),
 });

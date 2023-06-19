@@ -1,12 +1,42 @@
 import { SignIn, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import { useRef, type PropsWithChildren } from 'react';
+import { type IconType } from 'react-icons';
 import { AiFillHome, AiOutlineHome } from 'react-icons/ai';
 import { FaLightbulb, FaRegLightbulb } from 'react-icons/fa';
 import { MdPeople, MdPeopleOutline } from 'react-icons/md';
 import { useDevice } from '~/hooks/device';
 import { useRefPosition } from '~/hooks/position';
 import { Path } from './path';
+
+interface NavigationItemProps {
+  name: string;
+  path: string;
+  IconFill: IconType;
+  IconOutline: IconType;
+}
+
+const NavigationItem = ({ name, path, IconFill, IconOutline }: NavigationItemProps) => {
+  const device = useDevice();
+
+  return (
+    <li title={device.mobile ? name : ''}>
+      <Link
+        href={path}
+        className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900 hover:text-teal-100"
+      >
+        <Path is={path}>
+          <IconFill className="text-3xl text-teal-400" />
+          <span className="font-medium text-teal-400 mobile:hidden">{name}</span>
+        </Path>
+        <Path not={path}>
+          <IconOutline className="text-3xl" />
+          <span className="mobile:hidden">{name}</span>
+        </Path>
+      </Link>
+    </li>
+  );
+};
 
 const Navigation = () => {
   const device = useDevice();
@@ -39,51 +69,19 @@ const Navigation = () => {
             }}
           />
         </li>
-        <li title={device.mobile ? 'Home' : ''}>
-          <Link
-            href="/"
-            className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900 hover:text-teal-100"
-          >
-            <Path is="/">
-              <AiFillHome className="text-3xl text-teal-400" />
-              <span className="font-medium text-teal-400 mobile:hidden">Home</span>
-            </Path>
-            <Path not="/">
-              <AiOutlineHome className="text-3xl" />
-              <span className="mobile:hidden">Home</span>
-            </Path>
-          </Link>
-        </li>
-        <li title={device.mobile ? 'Friends' : ''}>
-          <Link
-            href="/friends"
-            className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900 hover:text-teal-100"
-          >
-            <Path is="/friends">
-              <MdPeople className="text-3xl text-teal-400" />
-              <span className="font-medium text-teal-400 mobile:hidden">Friends</span>
-            </Path>
-            <Path not="/friends">
-              <MdPeopleOutline className="text-3xl" />
-              <span className="mobile:hidden">Friends</span>
-            </Path>
-          </Link>
-        </li>
-        <li title={device.mobile ? 'Ideas' : ''}>
-          <Link
-            href="/ideas"
-            className="flex flex-row gap-3 rounded-lg p-2 transition-all hover:bg-neutral-900 hover:text-teal-100"
-          >
-            <Path is="/ideas">
-              <FaLightbulb className="text-3xl text-teal-400" />
-              <span className="font-medium text-teal-400 mobile:hidden">Ideas</span>
-            </Path>
-            <Path not="/ideas">
-              <FaRegLightbulb className="text-3xl" />
-              <span className="mobile:hidden">Ideas</span>
-            </Path>
-          </Link>
-        </li>
+        <NavigationItem name="Home" path="/" IconFill={AiFillHome} IconOutline={AiOutlineHome} />
+        <NavigationItem
+          name="Friends"
+          path="/friends"
+          IconFill={MdPeople}
+          IconOutline={MdPeopleOutline}
+        />
+        <NavigationItem
+          name="Ideas"
+          path="/ideas"
+          IconFill={FaLightbulb}
+          IconOutline={FaRegLightbulb}
+        />
       </ul>
     </nav>
   );
