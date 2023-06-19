@@ -4,7 +4,7 @@ import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { IoPause, IoPlay } from 'react-icons/io5';
 import { If } from '~/components/condition';
 import { LoadingSpinner } from '~/components/loading';
-import { SearchResultsSkeleton } from '~/components/skeleton';
+import { SongSearchResultsSkeleton } from '~/components/skeleton';
 import { useAudio } from '~/hooks/audio';
 import { api } from '~/utils/api';
 
@@ -15,7 +15,7 @@ const Home: NextPage = () => {
   const theme = api.themes.getActive.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
   const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
-  const createSong = api.songs.create.useMutation();
+  const createSong = api.songs.create.useMutation({ onSuccess: () => userSong.refetch() });
   const audio = useAudio();
 
   const handleChangeQuery = (e: ChangeEvent<HTMLInputElement>) => {
@@ -58,8 +58,6 @@ const Home: NextPage = () => {
       uri: song.uri,
       themeId: theme.data.id,
     });
-
-    void userSong.refetch().then(() => createSong.reset());
   };
 
   return (
@@ -102,7 +100,7 @@ const Home: NextPage = () => {
                 title={song ? 'Post!' : 'Choose a song'}
                 className="p-2 pr-3 text-xl transition-colors hover:text-teal-400 disabled:text-neutral-700"
               >
-                {createSong.isLoading || createSong.isSuccess ? <LoadingSpinner /> : <IoPlay />}
+                {createSong.isLoading || userSong.isLoading ? <LoadingSpinner /> : <IoPlay />}
               </button>
             </form>
           </If>
@@ -112,7 +110,7 @@ const Home: NextPage = () => {
             <div className="absolute top-0"></div>
             <If cond={!songs.data?.length}>
               <If cond={songs.isFetching}>
-                <SearchResultsSkeleton />
+                <SongSearchResultsSkeleton />
               </If>
               <If cond={!songs.isFetching}>
                 <ul className="absolute top-0 flex max-h-64 w-1/2 min-w-2xs flex-col overflow-y-scroll rounded-lg bg-black outline outline-1 outline-teal-400">

@@ -71,8 +71,8 @@ const Navigation = () => {
         </li>
         <NavigationItem name="Home" path="/" IconFill={AiFillHome} IconOutline={AiOutlineHome} />
         <NavigationItem
-          name="Friends"
-          path="/friends"
+          name="Follows"
+          path="/follows"
           IconFill={MdPeople}
           IconOutline={MdPeopleOutline}
         />

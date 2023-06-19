@@ -1,15 +1,57 @@
 import { TRPCError } from '@trpc/server';
 import { z } from 'zod';
-import { createTRPCRouter, privateProcedure, publicProcedure } from '~/server/api/trpc';
+import { createTRPCRouter, privateProcedure } from '~/server/api/trpc';
 
 const currentUserRouter = createTRPCRouter({
-  getNotFollowedByName: privateProcedure
+  get: privateProcedure.query(({ ctx }) => {
+    return ctx.prisma.user.findUnique({ where: { clerkId: ctx.clerkId } });
+  }),
+  getFollowed: privateProcedure.query(async ({ ctx }) => {
+    const user = await ctx.prisma.user.findUnique({
+      where: { clerkId: ctx.clerkId },
+      select: { id: true },
+    });
+    if (!user) throw new TRPCError({ code: 'CONFLICT' });
+
+    return ctx.prisma.user.findMany({
+      where: {
+        followers: {
+          some: {
+            id: user.id,
+          },
+        },
+      },
+    });
+  }),
+});
+
+export const usersRouter = createTRPCRouter({
+  current: currentUserRouter,
+  getByName: privateProcedure
     .input(z.object({ name: z.string() }))
     .query(async ({ ctx, input }) => {
-      if (!input.name) return [];
-
-      const user = await ctx.prisma.user.findUnique({ where: { clerkId: ctx.clerkId } });
+      const user = await ctx.prisma.user.findUnique({
+        where: { clerkId: ctx.clerkId },
+        select: { id: true },
+      });
       if (!user) throw new TRPCError({ code: 'CONFLICT' });
+
+      if (!input.name)
+        return ctx.prisma.user.findMany({
+          where: {
+            followers: {
+              some: {
+                id: user.id,
+              },
+            },
+          },
+          select: {
+            id: true,
+            name: true,
+            avatarUrl: true,
+            followers: true,
+          },
+        });
 
       return ctx.prisma.user.findMany({
         select: {
@@ -21,11 +63,6 @@ const currentUserRouter = createTRPCRouter({
         where: {
           id: {
             not: user.id,
-          },
-          followers: {
-            none: {
-              id: user.id,
-            },
           },
           name: {
             contains: input.name,
@@ -39,29 +76,4 @@ const currentUserRouter = createTRPCRouter({
         },
       });
     }),
-});
-
-export const usersRouter = createTRPCRouter({
-  current: currentUserRouter,
-  getByName: publicProcedure.input(z.object({ name: z.string() })).query(({ ctx, input }) => {
-    return ctx.prisma.user.findMany({
-      select: {
-        id: true,
-        name: true,
-        avatarUrl: true,
-        followers: true,
-      },
-      where: {
-        name: {
-          contains: input.name,
-          mode: 'insensitive',
-        },
-      },
-      orderBy: {
-        followers: {
-          _count: 'desc',
-        },
-      },
-    });
-  }),
 });
