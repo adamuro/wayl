@@ -29,10 +29,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     case 'user.updated':
       const { id, profile_image_url, username, first_name } = event.data;
       const user = await prisma.user.upsert({
-        where: { clerkId: id },
+        where: { id },
         update: { avatarUrl: profile_image_url },
         create: {
-          clerkId: id,
+          id,
           avatarUrl: profile_image_url,
           name: username || first_name,
         },
@@ -40,7 +40,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       return res.status(201).json(user);
     case 'user.deleted':
-      const deleted = await prisma.user.delete({ where: { clerkId: event.data.id } });
+      const deleted = await prisma.user.delete({ where: { id: event.data.id } });
       return res.status(200).json(deleted);
     default:
       return res.status(400).json({ error: 'Unsupported event type.' });

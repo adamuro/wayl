@@ -17,13 +17,6 @@ export const songsRouter = createTRPCRouter({
       }),
     )
     .mutation(async ({ ctx, input }) => {
-      const user = await ctx.prisma.user.findUnique({
-        select: { id: true },
-        where: { clerkId: ctx.clerkId },
-      });
-
-      if (!user) throw new TRPCError({ code: 'CONFLICT' });
-
       return ctx.prisma.song.create({
         data: {
           title: input.title,
@@ -31,20 +24,17 @@ export const songsRouter = createTRPCRouter({
           imageUrl: input.imageUrl,
           uri: input.uri,
           themeId: input.themeId,
-          userId: user.id,
+          userId: ctx.userId,
         },
       });
     }),
   getForCurrentUserAndTheme: privateProcedure.query(async ({ ctx }) => {
-    const user = await ctx.prisma.user.findUnique({ where: { clerkId: ctx.clerkId } });
-    if (!user) throw new TRPCError({ code: 'CONFLICT' });
-
     const theme = await ctx.prisma.theme.findFirst({ where: { active: true } });
     if (!theme?.date) throw new TRPCError({ code: 'CONFLICT' });
 
     return ctx.prisma.song.findFirst({
       where: {
-        userId: user.id,
+        userId: ctx.userId,
         theme: { active: true },
         createdAt: { gte: theme.date },
       },
