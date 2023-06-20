@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { IoPause, IoPlay } from 'react-icons/io5';
 import { If } from '~/components/condition';
-import { LoadingSpinner } from '~/components/loading';
+import { LoadingSpinnerSm } from '~/components/loading';
 import { SongSearchResultsSkeleton } from '~/components/skeleton';
 import { useAudio } from '~/hooks/audio';
 import { api } from '~/utils/api';
@@ -63,7 +63,7 @@ const Home: NextPage = () => {
   return (
     <>
       <section
-        className={`sticky top-0 z-50  p-4 ${
+        className={`sticky top-0 z-50 p-4 ${
           userSong.isFetched && userSong.data
             ? 'border-b border-neutral-700 bg-black'
             : 'bg-gradient-to-b from-black from-40% to-transparent'
@@ -100,7 +100,7 @@ const Home: NextPage = () => {
                 title={song ? 'Post!' : 'Choose a song'}
                 className="p-2 pr-3 text-xl transition-colors hover:text-teal-400 disabled:text-neutral-700"
               >
-                {createSong.isLoading || userSong.isLoading ? <LoadingSpinner /> : <IoPlay />}
+                {createSong.isLoading || userSong.isLoading ? <LoadingSpinnerSm /> : <IoPlay />}
               </button>
             </form>
           </If>

@@ -16,6 +16,34 @@ const currentUserRouter = createTRPCRouter({
       },
     });
   }),
+  follow: privateProcedure.input(z.object({ id: z.string() })).mutation(({ ctx, input }) => {
+    return ctx.prisma.user.update({
+      where: {
+        id: ctx.userId,
+      },
+      data: {
+        following: {
+          connect: {
+            id: input.id,
+          },
+        },
+      },
+    });
+  }),
+  unfollow: privateProcedure.input(z.object({ id: z.string() })).mutation(({ ctx, input }) => {
+    return ctx.prisma.user.update({
+      where: {
+        id: ctx.userId,
+      },
+      data: {
+        following: {
+          disconnect: {
+            id: input.id,
+          },
+        },
+      },
+    });
+  }),
 });
 
 export const usersRouter = createTRPCRouter({

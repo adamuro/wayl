@@ -1,15 +1,78 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { If } from '~/components/condition';
+import { LoadingSpinnerMd } from '~/components/loading';
+import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
 import { UserSearchResultsSkeleton } from '~/components/skeleton';
-import { api } from '~/utils/api';
+import { type RouterOutputs, api } from '~/utils/api';
+import { type User } from '@prisma/client';
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact' });
 
+interface UserResultProps {
+  user: RouterOutputs['users']['getByName'][number];
+  onSuccess: (data: User, variables: { id: string }, context: unknown) => unknown;
+}
+const UserResult = ({ user, onSuccess }: UserResultProps) => {
+  const currentUser = api.users.current.get.useQuery();
+  const follow = api.users.current.follow.useMutation({ onSuccess });
+  const unfollow = api.users.current.unfollow.useMutation({ onSuccess });
+
+  const followed = useMemo(
+    () => currentUser.data?.id && user.followers.some(({ id }) => id === currentUser.data?.id),
+    [currentUser, user],
+  );
+
+  const loading = useMemo(
+    () => follow.isLoading || unfollow.isLoading,
+    [follow.isLoading, unfollow.isLoading],
+  );
+
+  const action = useCallback(
+    () => (followed ? unfollow.mutate({ id: user.id }) : follow.mutate({ id: user.id })),
+    [followed, follow, unfollow, user],
+  );
+
+  return (
+    <li className="flex items-center gap-4 p-4 transition-colors hover:bg-neutral-900 hover:text-teal-400">
+      <div>
+        <div className="w-9">
+          <Image
+            alt={`${user.name} profile picture`}
+            src={user.avatarUrl}
+            width={36}
+            height={36}
+            className="h-9 w-9 rounded-full"
+          />
+        </div>
+      </div>
+      <div className="flex w-full items-center justify-between">
+        <div className="flex flex-col break-words">
+          <span className="leading-5">{user.name}</span>
+          <span className="break-words text-xs text-neutral-50">
+            {formatter.format(user.followers.length)}
+            {user.followers.length === 1 ? ' follower' : ' followers'}
+          </span>
+        </div>
+        <button
+          onClick={action}
+          disabled={loading}
+          title={loading ? '' : followed ? 'Unfollow' : 'Follow'}
+          className="rounded-lg p-2 text-2xl text-neutral-50 transition-colors hover:bg-black hover:text-teal-400"
+        >
+          <If cond={loading}>
+            <LoadingSpinnerMd />
+          </If>
+          <If cond={!loading}>{followed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}</If>
+        </button>
+      </div>
+    </li>
+  );
+};
+
 const Follows: NextPage = () => {
   const [name, setName] = useState('');
-  const currentUser = api.users.current.get.useQuery();
   const users = api.users.getByName.useQuery({ name }, { keepPreviousData: true });
 
   return (
@@ -19,15 +82,13 @@ const Follows: NextPage = () => {
           <h2 className="text-center text-3xl">
             Users you <span className="text-teal-400">follow</span>
           </h2>
-          <form
-            // onSubmit={handleSubmit}
-            className="flex w-1/2 min-w-2xs rounded-lg border border-neutral-50 bg-black transition-colors focus-within:border-teal-400 hover:border-teal-400"
-          >
+          <form className="flex w-1/2 min-w-2xs rounded-lg border border-neutral-50 bg-black transition-colors focus-within:border-teal-400 hover:border-teal-400">
             <input
               type="text"
               autoComplete="off"
-              placeholder="Search..."
+              placeholder="Find your friends..."
               value={name}
+              title=""
               required
               onChange={(e) => setName(e.target.value)}
               className="w-full bg-transparent p-2 text-neutral-50 outline-none transition-all focus:border-teal-400"
@@ -49,50 +110,7 @@ const Follows: NextPage = () => {
         <If cond={users.data?.length}>
           <ul>
             {users.data?.map((user) => (
-              <li
-                key={user.id}
-                // onMouseDown={() => handleSelectSong(song)}
-                className="flex items-center gap-4 p-4 transition-colors hover:bg-neutral-900 hover:text-teal-400"
-              >
-                <Image
-                  alt={`${user.name} profile picture`}
-                  src={user.avatarUrl}
-                  width={36}
-                  height={36}
-                  className="h-9 w-9 rounded-full"
-                />
-                <div className="flex w-full items-center justify-between">
-                  <div className="flex flex-col break-words">
-                    <span className="leading-5">{user.name}</span>
-                    <span className="break-words text-xs text-neutral-50">
-                      {formatter.format(user.followers.length)}
-                      {user.followers.length === 1 ? ' follower' : ' followers'}
-                    </span>
-                  </div>
-                  {/* <If cond={audio.paused || audio.current !== song.id}>
-                    <IoPlay className="text-xl" />
-                    </If>
-                    <If cond={audio.playing && audio.current === song.id}>
-                    <IoPause className="text-xl" />
-                  </If> */}
-                  {currentUser.data?.id &&
-                  user.followers.some(({ id }) => id === currentUser.data?.id) ? (
-                    <button
-                      // onMouseDown={(e) => handlePreviewSong(e, song)}
-                      className="rounded-full border border-teal-400 bg-black px-4 py-2 text-neutral-50 transition-colors hover:bg-neutral-900 hover:text-teal-400"
-                    >
-                      Unfollow
-                    </button>
-                  ) : (
-                    <button
-                      // onMouseDown={(e) => handlePreviewSong(e, song)}
-                      className="rounded-full border border-teal-400 bg-neutral-900 px-4 py-2 text-neutral-50 transition-colors hover:bg-black hover:text-teal-400"
-                    >
-                      Follow
-                    </button>
-                  )}
-                </div>
-              </li>
+              <UserResult key={user.id} user={user} onSuccess={() => users.refetch()} />
             ))}
           </ul>
         </If>
