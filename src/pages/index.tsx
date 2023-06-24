@@ -29,7 +29,7 @@ const FeedSong = ({ song }: FeedSongProps) => {
         </div>
         <div className="flex w-full">
           <div className="flex flex-col break-words">
-            <span className="font-bold leading-5">{song.user.name}</span>
+            <span className="font-semibold leading-5">{song.user.name}</span>
             <span className="break-words text-xs text-neutral-50">2h ago</span>
           </div>
         </div>
@@ -37,7 +37,7 @@ const FeedSong = ({ song }: FeedSongProps) => {
       <div className="flex items-center gap-4 p-4">
         <div className="flex w-full items-center justify-between text-right">
           <div className="flex flex-col break-words">
-            <span className="leading-5">{song.title}</span>
+            <span className="font-semibold leading-5">{song.title}</span>
             <span className="break-words text-xs text-neutral-50">{song.authors.join(', ')}</span>
           </div>
         </div>
@@ -195,7 +195,7 @@ const Home: NextPage = () => {
                     />
                     <div className="flex w-full items-center justify-between">
                       <div className="flex flex-col break-words">
-                        <span className="leading-5">{song.name}</span>
+                        <span className="font-medium leading-5">{song.name}</span>
                         <span className="break-words text-xs text-neutral-50">
                           {song.artists.map((artist) => artist.name).join(', ')}
                         </span>
