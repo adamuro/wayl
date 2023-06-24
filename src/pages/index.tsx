@@ -6,7 +6,64 @@ import { If } from '~/components/condition';
 import { LoadingSpinnerSm } from '~/components/loading';
 import { SongSearchResultsSkeleton } from '~/components/skeleton';
 import { useAudio } from '~/hooks/audio';
-import { api } from '~/utils/api';
+import { type RouterOutputs, api } from '~/utils/api';
+
+interface FeedSongProps {
+  song: RouterOutputs['songs']['getCurrentUserFeed'][number];
+}
+
+const FeedSong = ({ song }: FeedSongProps) => {
+  return (
+    <li className="flex items-center justify-between gap-4 transition-colors hover:bg-neutral-900">
+      <div className="flex items-center gap-4 p-4 transition-colors hover:text-teal-400">
+        <div>
+          <div className="w-9">
+            <Image
+              alt={`${song.user.name} profile picture`}
+              src={song.user.avatarUrl}
+              width={36}
+              height={36}
+              className="h-9 w-9 rounded-full"
+            />
+          </div>
+        </div>
+        <div className="flex w-full">
+          <div className="flex flex-col break-words">
+            <span className="font-bold leading-5">{song.user.name}</span>
+            <span className="break-words text-xs text-neutral-50">2h ago</span>
+          </div>
+        </div>
+      </div>
+      <div className="flex items-center gap-4 p-4">
+        <div className="flex w-full items-center justify-between text-right">
+          <div className="flex flex-col break-words">
+            <span className="leading-5">{song.title}</span>
+            <span className="break-words text-xs text-neutral-50">{song.authors}</span>
+          </div>
+        </div>
+        <div>
+          <div className="w-10">
+            <div className="group relative cursor-pointer hover:text-teal-400">
+              <Image
+                alt={`${song.title} album image`}
+                src={song.imageUrl || ''}
+                width={40}
+                height={40}
+                className="relative z-20 h-10 w-10 opacity-70 transition-opacity group-hover:opacity-30"
+              />
+              <div
+                id="play"
+                className="absolute top-0 z-20 flex h-10 w-10 items-center justify-center opacity-80 transition-all group-hover:opacity-100"
+              >
+                <IoPlay className="text-2xl" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </li>
+  );
+};
 
 const Home: NextPage = () => {
   const [query, setQuery] = useState('');
@@ -14,6 +71,7 @@ const Home: NextPage = () => {
   const [song, setSong] = useState<SpotifyApi.TrackObjectFull | null>(null);
   const theme = api.themes.getActive.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
+  const feed = api.songs.getCurrentUserFeed.useQuery();
   const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
   const createSong = api.songs.create.useMutation({ onSuccess: () => userSong.refetch() });
   const audio = useAudio();
@@ -164,107 +222,11 @@ const Home: NextPage = () => {
         </If>
       </section>
       <section>
-        <ul className={userSong.data ? '' : 'select-none blur-sm'}>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
-          <li className="border-b border-neutral-700 p-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iure deserunt sequi
-            repellendus aliquam non maxime aspernatur est suscipit eveniet, sunt, temporibus, beatae
-            eligendi delectus minima earum voluptas tempore corrupti iusto.
-          </li>
+        <ul className={userSong.data ? '' : 'pointer-events-none select-none blur-sm'}>
+          {userSong.data ? <FeedSong key={userSong.data?.id} song={userSong.data} /> : null}
+          {feed.data?.map((song) => (
+            <FeedSong key={song.id} song={song} />
+          ))}
         </ul>
       </section>
     </>

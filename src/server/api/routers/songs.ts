@@ -38,6 +38,54 @@ export const songsRouter = createTRPCRouter({
         theme: { active: true },
         createdAt: { gte: theme.date },
       },
+      select: {
+        id: true,
+        title: true,
+        authors: true,
+        imageUrl: true,
+        uri: true,
+        user: {
+          select: {
+            name: true,
+            avatarUrl: true,
+          },
+        },
+      },
+    });
+  }),
+  getCurrentUserFeed: privateProcedure.query(async ({ ctx }) => {
+    const theme = await ctx.prisma.theme.findFirst({ where: { active: true } });
+    if (!theme?.date) throw new TRPCError({ code: 'CONFLICT' });
+
+    return ctx.prisma.song.findMany({
+      where: {
+        theme: {
+          active: true,
+        },
+        createdAt: {
+          gte: theme.date,
+        },
+        user: {
+          followers: {
+            some: {
+              id: ctx.userId,
+            },
+          },
+        },
+      },
+      select: {
+        id: true,
+        title: true,
+        authors: true,
+        imageUrl: true,
+        uri: true,
+        user: {
+          select: {
+            name: true,
+            avatarUrl: true,
+          },
+        },
+      },
     });
   }),
 });

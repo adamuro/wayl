@@ -14,6 +14,7 @@ interface UserResultProps {
   user: RouterOutputs['users']['getByName'][number];
   onSuccess: (data: User, variables: { id: string }, context: unknown) => unknown;
 }
+
 const UserResult = ({ user, onSuccess }: UserResultProps) => {
   const currentUser = api.users.current.get.useQuery();
   const follow = api.users.current.follow.useMutation({ onSuccess });
@@ -49,7 +50,7 @@ const UserResult = ({ user, onSuccess }: UserResultProps) => {
       </div>
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col break-words">
-          <span className="leading-5">{user.name}</span>
+          <span className="font-bold leading-5">{user.name}</span>
           <span className="break-words text-xs text-neutral-50">
             {formatter.format(user.followers.length)}
             {user.followers.length === 1 ? ' follower' : ' followers'}
