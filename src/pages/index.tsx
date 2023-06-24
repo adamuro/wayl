@@ -14,7 +14,7 @@ interface FeedSongProps {
 
 const FeedSong = ({ song }: FeedSongProps) => {
   return (
-    <li className="flex items-center justify-between gap-4 transition-colors hover:bg-neutral-900">
+    <li className="flex items-center justify-between transition-colors hover:bg-neutral-900">
       <div className="flex items-center gap-4 p-4 transition-colors hover:text-teal-400">
         <div>
           <div className="w-9">
