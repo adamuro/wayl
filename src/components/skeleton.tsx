@@ -70,7 +70,7 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-40 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
@@ -94,7 +94,7 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-52 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-24 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
@@ -106,8 +106,8 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-44 rounded-full bg-neutral-700"></div>
-            <div className="h-2 w-24 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
+            <div className="h-2 w-20 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
         </div>
@@ -130,43 +130,7 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-40 rounded-full bg-neutral-700"></div>
-            <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
-          </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
-        </div>
-      </li>
-      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
-        <div className="flex h-9 rounded-full bg-neutral-700">
-          <div className="w-9"></div>
-        </div>
-        <div className="flex w-full justify-between">
-          <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-48 rounded-full bg-neutral-700"></div>
-            <div className="h-2 w-20 rounded-full bg-neutral-700"></div>
-          </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
-        </div>
-      </li>
-      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
-        <div className="flex h-9 rounded-full bg-neutral-700">
-          <div className="w-9"></div>
-        </div>
-        <div className="flex w-full justify-between">
-          <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-40 rounded-full bg-neutral-700"></div>
-            <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
-          </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
-        </div>
-      </li>
-      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
-        <div className="flex h-9 rounded-full bg-neutral-700">
-          <div className="w-9"></div>
-        </div>
-        <div className="flex w-full justify-between">
-          <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-40 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-20 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
@@ -190,7 +154,7 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-52 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
@@ -202,8 +166,44 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-44 rounded-full bg-neutral-700"></div>
-            <div className="h-2 w-24 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-20 rounded-full bg-neutral-700"></div>
+            <div className="h-2 w-14 rounded-full bg-neutral-700"></div>
+          </div>
+          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex h-9 rounded-full bg-neutral-700">
+          <div className="w-9"></div>
+        </div>
+        <div className="flex w-full justify-between">
+          <div className="flex flex-col justify-center gap-2">
+            <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
+            <div className="h-2 w-20 rounded-full bg-neutral-700"></div>
+          </div>
+          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex h-9 rounded-full bg-neutral-700">
+          <div className="w-9"></div>
+        </div>
+        <div className="flex w-full justify-between">
+          <div className="flex flex-col justify-center gap-2">
+            <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
+            <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
+          </div>
+          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex h-9 rounded-full bg-neutral-700">
+          <div className="w-9"></div>
+        </div>
+        <div className="flex w-full justify-between">
+          <div className="flex flex-col justify-center gap-2">
+            <div className="h-3 w-24 rounded-full bg-neutral-700"></div>
+            <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
         </div>
