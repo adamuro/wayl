@@ -38,7 +38,7 @@ const FeedSong = ({ song }: FeedSongProps) => {
         <div className="flex w-full items-center justify-between text-right">
           <div className="flex flex-col break-words">
             <span className="leading-5">{song.title}</span>
-            <span className="break-words text-xs text-neutral-50">{song.authors}</span>
+            <span className="break-words text-xs text-neutral-50">{song.authors.join(', ')}</span>
           </div>
         </div>
         <div>
