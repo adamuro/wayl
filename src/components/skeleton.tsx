@@ -82,8 +82,8 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
-            <div className="h-2 w-20 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-20 rounded-full bg-neutral-700"></div>
+            <div className="h-2 w-10 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
         </div>
@@ -118,7 +118,7 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-24 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-12 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
@@ -142,8 +142,8 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
-            <div className="h-2 w-20 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-20 rounded-full bg-neutral-700"></div>
+            <div className="h-2 w-12 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
         </div>
@@ -178,8 +178,8 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
-            <div className="h-2 w-20 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-24 rounded-full bg-neutral-700"></div>
+            <div className="h-2 w-14 rounded-full bg-neutral-700"></div>
           </div>
           <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
         </div>
