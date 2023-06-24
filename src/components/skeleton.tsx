@@ -73,7 +73,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -82,10 +82,10 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-20 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-10 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -97,7 +97,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-24 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -109,7 +109,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-20 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -121,7 +121,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-24 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-12 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -130,10 +130,10 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-20 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -145,7 +145,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-20 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-12 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -157,7 +157,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -169,7 +169,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-20 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-14 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -178,10 +178,10 @@ export const UserSearchResultsSkeleton = () => {
         </div>
         <div className="flex w-full justify-between">
           <div className="flex flex-col justify-center gap-2">
-            <div className="h-3 w-24 rounded-full bg-neutral-700"></div>
+            <div className="h-3 w-32 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-14 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -193,7 +193,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-28 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
       <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
@@ -205,7 +205,7 @@ export const UserSearchResultsSkeleton = () => {
             <div className="h-3 w-24 rounded-full bg-neutral-700"></div>
             <div className="h-2 w-16 rounded-full bg-neutral-700"></div>
           </div>
-          <div className="flex h-9 w-24 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
         </div>
       </li>
     </ul>
