@@ -25,7 +25,7 @@ const UserResult = ({ user, onSuccess }: UserResultProps) => {
     [currentUser, user],
   );
 
-  const loading = useMemo(
+  const actionsLoading = useMemo(
     () => follow.isLoading || unfollow.isLoading,
     [follow.isLoading, unfollow.isLoading],
   );
@@ -58,14 +58,16 @@ const UserResult = ({ user, onSuccess }: UserResultProps) => {
         </div>
         <button
           onClick={action}
-          disabled={loading}
-          title={loading ? '' : followed ? 'Unfollow' : 'Follow'}
+          disabled={actionsLoading}
+          title={actionsLoading ? '' : followed ? 'Unfollow' : 'Follow'}
           className="rounded-lg p-2 text-2xl text-neutral-50 transition-colors hover:bg-black hover:text-teal-400"
         >
-          <If cond={loading}>
+          <If cond={actionsLoading}>
             <LoadingSpinnerMd />
           </If>
-          <If cond={!loading}>{followed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}</If>
+          <If cond={!actionsLoading}>
+            {followed || currentUser.isLoading ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
+          </If>
         </button>
       </div>
     </li>
