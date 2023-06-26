@@ -28,13 +28,10 @@ export default {
       width: {
         '2xs': '16rem',
       },
-    },
-    screens: {
-      mobile: {
-        min: '0px',
-        max: '1151.9px',
+      screens: {
+        sm: '576px',
+        lg: '1152px',
       },
-      desktop: '1152px',
     },
   },
   plugins: [],

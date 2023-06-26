@@ -27,7 +27,7 @@ const FeedSong = ({ song }: FeedSongProps) => {
             />
           </div>
         </div>
-        <div className="flex w-full">
+        <div className="hidden w-full sm:flex">
           <div className="flex flex-col break-words">
             <span className="font-semibold leading-5">{song.user.name}</span>
             <span className="break-words text-xs text-neutral-50">2h ago</span>

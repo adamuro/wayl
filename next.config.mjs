@@ -19,7 +19,13 @@ const config = {
     defaultLocale: 'en',
   },
   images: {
-    domains: ['i.scdn.co', 'images.clerk.dev', 'scontent-ord5-1.xx.fbcdn.net'],
+    domains: [
+      'i.scdn.co',
+      'www.gravatar.com',
+      'images.clerk.dev',
+      'scontent-ord5-1.xx.fbcdn.net',
+      'platform-lookaside.fbsbx.com',
+    ],
   },
 };
 export default config;

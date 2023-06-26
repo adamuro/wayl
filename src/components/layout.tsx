@@ -27,11 +27,11 @@ const NavigationItem = ({ name, path, IconFill, IconOutline }: NavigationItemPro
       >
         <Path is={path}>
           <IconFill className="text-3xl text-teal-400" />
-          <span className="font-medium text-teal-400 mobile:hidden">{name}</span>
+          <span className="hidden font-medium text-teal-400 lg:flex">{name}</span>
         </Path>
         <Path not={path}>
           <IconOutline className="text-3xl" />
-          <span className="mobile:hidden">{name}</span>
+          <span className="hidden lg:flex">{name}</span>
         </Path>
       </Link>
     </li>
@@ -98,7 +98,7 @@ export const PageLayout = (props: PropsWithChildren) => {
       <SignedIn>
         <div className="flex h-full flex-row justify-center">
           <Navigation />
-          <main className="w-full max-w-2xl border-x border-neutral-700 mobile:flex-auto desktop:min-w-2xl desktop:flex-1">
+          <main className="w-full max-w-2xl flex-auto border-x border-neutral-700">
             {props.children}
           </main>
           <aside className="flex-1"></aside>
