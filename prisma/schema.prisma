@@ -20,6 +20,7 @@ model User {
     roles     Role[] @default([USER])
     following User[] @relation("follows")
     followers User[] @relation("follows")
+    upvotes   Idea[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -48,6 +49,15 @@ model Theme {
     available Boolean   @default(true)
     active    Boolean   @default(false)
     songs     Song[]
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+model Idea {
+    id       Int    @id @default(autoincrement())
+    content  String @unique
+    upvoters User[]
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt

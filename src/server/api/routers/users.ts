@@ -69,12 +69,6 @@ export const usersRouter = createTRPCRouter({
         });
 
       return ctx.prisma.user.findMany({
-        select: {
-          id: true,
-          name: true,
-          avatarUrl: true,
-          followers: true,
-        },
         where: {
           id: {
             not: ctx.userId,
@@ -83,6 +77,12 @@ export const usersRouter = createTRPCRouter({
             contains: input.name,
             mode: 'insensitive',
           },
+        },
+        select: {
+          id: true,
+          name: true,
+          avatarUrl: true,
+          followers: true,
         },
         orderBy: {
           followers: {

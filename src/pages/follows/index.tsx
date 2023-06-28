@@ -7,6 +7,7 @@ import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
 import { UserSearchResultsSkeleton } from '~/components/skeleton';
 import { type RouterOutputs, api } from '~/utils/api';
 import { type User } from '@prisma/client';
+import { useAuth } from '@clerk/nextjs';
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact' });
 
@@ -16,13 +17,13 @@ interface UserResultProps {
 }
 
 const UserResult = ({ user, onSuccess }: UserResultProps) => {
-  const currentUser = api.users.current.get.useQuery();
+  const { userId } = useAuth();
   const follow = api.users.current.follow.useMutation({ onSuccess });
   const unfollow = api.users.current.unfollow.useMutation({ onSuccess });
 
   const followed = useMemo(
-    () => currentUser.data?.id && user.followers.some(({ id }) => id === currentUser.data?.id),
-    [currentUser, user],
+    () => userId && user.followers.some(({ id }) => id === userId),
+    [userId, user],
   );
 
   const actionsLoading = useMemo(
@@ -66,7 +67,7 @@ const UserResult = ({ user, onSuccess }: UserResultProps) => {
             <LoadingSpinnerMd />
           </If>
           <If cond={!actionsLoading}>
-            {followed || currentUser.isLoading ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
+            {followed && userId ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
           </If>
         </button>
       </div>
@@ -80,7 +81,7 @@ const Follows: NextPage = () => {
 
   return (
     <>
-      <section className="sticky top-0 z-50 border-b border-neutral-700 bg-black p-4">
+      <section className="sticky top-0 border-b border-neutral-700 bg-black p-4">
         <header className="flex flex-col items-center gap-6">
           <h2 className="text-center text-3xl">
             Users you <span className="text-teal-400">follow</span>
@@ -88,10 +89,10 @@ const Follows: NextPage = () => {
           <form className="flex w-1/2 min-w-2xs rounded-lg border border-neutral-50 bg-black transition-colors focus-within:border-teal-400 hover:border-teal-400">
             <input
               type="text"
+              title=""
               autoComplete="off"
               placeholder="Find your friends..."
               value={name}
-              title=""
               required
               onChange={(e) => setName(e.target.value)}
               className="w-full bg-transparent p-2 text-neutral-50 outline-none transition-all focus:border-teal-400"

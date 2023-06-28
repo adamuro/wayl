@@ -145,7 +145,7 @@ const Home: NextPage = () => {
               <input
                 type="text"
                 autoComplete="off"
-                placeholder="Search..."
+                placeholder="Find a song..."
                 value={query}
                 required
                 onFocus={() => setFocus(true)}
