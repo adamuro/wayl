@@ -9,6 +9,21 @@ import { api, type RouterOutputs } from '~/utils/api';
 import { PiHeart, PiHeartFill } from 'react-icons/pi';
 import { If } from '~/components/condition';
 
+interface LikeIconProps {
+  liked: boolean;
+  hover: boolean;
+}
+
+const LikeIcon = ({ liked, hover }: LikeIconProps) => {
+  return liked ? (
+    <PiHeartFill className="text-teal-400 transition-colors group-hover:text-neutral-50" />
+  ) : hover ? (
+    <PiHeartFill className="text-teal-400" />
+  ) : (
+    <PiHeart className="text-neutral-50 " />
+  );
+};
+
 interface IdeaProps {
   idea: RouterOutputs['ideas']['getLiked'][number] | RouterOutputs['ideas']['getLatest'][number];
   onSuccess: (data: Idea, variables: { id: number }, context: unknown) => unknown;
@@ -40,21 +55,24 @@ const Idea = ({ idea, onSuccess }: IdeaProps) => {
       <span className="first-letter:uppercase">{idea.content}</span>
       <div className="flex items-center gap-2">
         <span>{idea.upvoters.length}</span>
-        <button
-          onClick={action}
-          disabled={actionsLoading}
-          title={actionsLoading ? '' : liked ? 'Unlike' : 'Like'}
+        <div
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
-          className="rounded-lg p-2 text-2xl text-neutral-50 transition-colors hover:bg-black hover:text-teal-400"
+          className="group flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
         >
-          <If cond={actionsLoading}>
-            <LoadingSpinnerMd />
-          </If>
-          <If cond={!actionsLoading}>
-            {(liked && userId) || hover ? <PiHeartFill /> : <PiHeart />}
-          </If>
-        </button>
+          <button
+            onClick={action}
+            disabled={actionsLoading}
+            title={actionsLoading ? '' : liked ? 'Unlike' : 'Like'}
+          >
+            <If cond={actionsLoading}>
+              <LoadingSpinnerMd />
+            </If>
+            <If cond={!actionsLoading}>
+              <LikeIcon liked={Boolean(liked)} hover={hover} />
+            </If>
+          </button>
+        </div>
       </div>
     </li>
   );
