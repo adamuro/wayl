@@ -20,7 +20,7 @@ const LikeIcon = ({ liked, hover }: LikeIconProps) => {
   ) : hover ? (
     <PiHeartFill className="text-teal-400" />
   ) : (
-    <PiHeart className="text-neutral-50 " />
+    <PiHeart className="text-neutral-50" />
   );
 };
 
@@ -55,24 +55,21 @@ const Idea = ({ idea, onSuccess }: IdeaProps) => {
       <span className="first-letter:uppercase">{idea.content}</span>
       <div className="flex items-center gap-2">
         <span>{idea.upvoters.length}</span>
-        <div
-          onMouseEnter={() => setHover(true)}
-          onMouseLeave={() => setHover(false)}
+        <button
+          onClick={action}
+          disabled={actionsLoading}
+          title={actionsLoading ? '' : liked ? 'Unlike' : 'Like'}
+          onMouseOver={() => setHover(true)}
+          onMouseOut={() => setHover(false)}
           className="group flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
         >
-          <button
-            onClick={action}
-            disabled={actionsLoading}
-            title={actionsLoading ? '' : liked ? 'Unlike' : 'Like'}
-          >
-            <If cond={actionsLoading}>
-              <LoadingSpinnerMd />
-            </If>
-            <If cond={!actionsLoading}>
-              <LikeIcon liked={Boolean(liked)} hover={hover} />
-            </If>
-          </button>
-        </div>
+          <If cond={actionsLoading}>
+            <LoadingSpinnerMd />
+          </If>
+          <If cond={!actionsLoading}>
+            <LikeIcon liked={Boolean(liked)} hover={hover} />
+          </If>
+        </button>
       </div>
     </li>
   );
