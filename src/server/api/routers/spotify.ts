@@ -31,4 +31,11 @@ export const spotifyRouter = createTRPCRouter({
       const songs = searchSongs(input.query);
       return songs;
     }),
+  getToken: privateProcedure.query(async ({ ctx }) => {
+    const tokens = await clerkClient.users.getUserOauthAccessToken(ctx.userId, 'oauth_spotify');
+    if (!tokens[0]) throw new TRPCError({ code: 'FORBIDDEN' });
+
+    const { token } = tokens[0];
+    return token;
+  }),
 });

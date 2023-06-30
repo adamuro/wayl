@@ -4,15 +4,17 @@ import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { IoPause, IoPlay } from 'react-icons/io5';
 import { If } from '~/components/condition';
 import { LoadingSpinnerSm } from '~/components/loading';
+import { Player } from '~/components/player';
 import { SongSearchResultsSkeleton } from '~/components/skeleton';
 import { useAudio } from '~/hooks/audio';
-import { type RouterOutputs, api } from '~/utils/api';
+import { api, type RouterOutputs } from '~/utils/api';
 
 interface FeedSongProps {
   song: RouterOutputs['songs']['getCurrentUserFeed'][number];
+  onPlay: () => void;
 }
 
-const FeedSong = ({ song }: FeedSongProps) => {
+const FeedSong = ({ song, onPlay }: FeedSongProps) => {
   return (
     <li className="flex items-center justify-between transition-colors hover:bg-neutral-900">
       <div className="flex items-center gap-4 p-4 transition-colors hover:text-teal-400">
@@ -43,7 +45,7 @@ const FeedSong = ({ song }: FeedSongProps) => {
         </div>
         <div>
           <div className="w-10">
-            <div className="group relative cursor-pointer hover:text-teal-400">
+            <button onClick={onPlay} className="group relative cursor-pointer hover:text-teal-400">
               <Image
                 alt={`${song.title} album image`}
                 src={song.imageUrl || ''}
@@ -57,7 +59,7 @@ const FeedSong = ({ song }: FeedSongProps) => {
               >
                 <IoPlay className="text-2xl" />
               </div>
-            </div>
+            </button>
           </div>
         </div>
       </div>
@@ -68,6 +70,7 @@ const FeedSong = ({ song }: FeedSongProps) => {
 const Home: NextPage = () => {
   const [query, setQuery] = useState('');
   const [focus, setFocus] = useState(false);
+  const [uri, setUri] = useState<string | null>(null);
   const [song, setSong] = useState<SpotifyApi.TrackObjectFull | null>(null);
   const theme = api.themes.getActive.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
@@ -162,6 +165,9 @@ const Home: NextPage = () => {
               </button>
             </form>
           </If>
+          <If cond={userSong.data}>
+            <Player uri={uri} />
+          </If>
         </header>
         <If cond={focus && query}>
           <div className="relative flex w-full justify-center">
@@ -223,9 +229,15 @@ const Home: NextPage = () => {
       </section>
       <section>
         <ul className={userSong.data ? '' : 'pointer-events-none select-none blur-sm'}>
-          {userSong.data ? <FeedSong key={userSong.data?.id} song={userSong.data} /> : null}
+          {userSong.data ? (
+            <FeedSong
+              key={userSong.data.id}
+              song={userSong.data}
+              onPlay={() => setUri(userSong.data?.uri ?? null)}
+            />
+          ) : null}
           {feed.data?.map((song) => (
-            <FeedSong key={song.id} song={song} />
+            <FeedSong key={song.id} song={song} onPlay={() => setUri(song.uri)} />
           ))}
         </ul>
       </section>
