@@ -3,7 +3,7 @@ import SpotifyPlayer, { type CallbackState } from 'react-spotify-web-playback';
 import { api } from '~/utils/api';
 
 interface PlayerProps {
-  uri: string | null;
+  uri?: string;
 }
 
 export const Player = ({ uri }: PlayerProps) => {

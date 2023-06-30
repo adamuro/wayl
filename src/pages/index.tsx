@@ -9,12 +9,14 @@ import { SongSearchResultsSkeleton } from '~/components/skeleton';
 import { useAudio } from '~/hooks/audio';
 import { api, type RouterOutputs } from '~/utils/api';
 
+type Song = RouterOutputs['songs']['getCurrentUserFeed'][number];
 interface FeedSongProps {
-  song: RouterOutputs['songs']['getCurrentUserFeed'][number];
+  song: Song;
+  isPlaying: boolean;
   onPlay: () => void;
 }
 
-const FeedSong = ({ song, onPlay }: FeedSongProps) => {
+const FeedSong = ({ song, isPlaying, onPlay }: FeedSongProps) => {
   return (
     <li className="flex items-center justify-between transition-colors hover:bg-neutral-900">
       <div className="flex items-center gap-4 p-4 transition-colors hover:text-teal-400">
@@ -39,25 +41,31 @@ const FeedSong = ({ song, onPlay }: FeedSongProps) => {
       <div className="flex items-center gap-4 p-4">
         <div className="flex w-full items-center justify-between text-right">
           <div className="flex flex-col break-words">
-            <span className="font-semibold leading-5">{song.title}</span>
+            <span
+              data-playing={isPlaying}
+              className="font-semibold leading-5 transition-colors data-[playing=true]:text-teal-400"
+            >
+              {song.title}
+            </span>
             <span className="break-words text-xs text-neutral-50">{song.authors.join(', ')}</span>
           </div>
         </div>
-        <div>
-          <div className="w-10">
+        <div className="flex items-center">
+          <div className="items h-10 w-10">
             <button onClick={onPlay} className="group relative cursor-pointer hover:text-teal-400">
               <Image
                 alt={`${song.title} album image`}
                 src={song.imageUrl || ''}
                 width={40}
                 height={40}
-                className="relative z-20 h-10 w-10 opacity-70 transition-opacity group-hover:opacity-30"
+                data-playing={isPlaying}
+                className="relative z-20 h-10 w-10 opacity-70 transition-opacity group-hover:opacity-30 data-[playing=true]:opacity-30"
               />
               <div
-                id="play"
-                className="absolute top-0 z-20 flex h-10 w-10 items-center justify-center opacity-80 transition-all group-hover:opacity-100"
+                data-playing={isPlaying}
+                className="absolute top-0 z-20 flex h-10 w-10 items-center justify-center opacity-80 transition-opacity group-hover:opacity-100 data-[playing=true]:text-teal-400 data-[playing=true]:opacity-100"
               >
-                <IoPlay className="text-2xl" />
+                <IoPlay className="text-2xl transition-colors" />
               </div>
             </button>
           </div>
@@ -70,7 +78,7 @@ const FeedSong = ({ song, onPlay }: FeedSongProps) => {
 const Home: NextPage = () => {
   const [query, setQuery] = useState('');
   const [focus, setFocus] = useState(false);
-  const [uri, setUri] = useState<string | null>(null);
+  const [playing, setPlaying] = useState<Song | null>(null);
   const [song, setSong] = useState<SpotifyApi.TrackObjectFull | null>(null);
   const theme = api.themes.getActive.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
@@ -166,7 +174,7 @@ const Home: NextPage = () => {
             </form>
           </If>
           <If cond={userSong.data}>
-            <Player uri={uri} />
+            <Player uri={playing?.uri} />
           </If>
         </header>
         <If cond={focus && query}>
@@ -233,11 +241,17 @@ const Home: NextPage = () => {
             <FeedSong
               key={userSong.data.id}
               song={userSong.data}
-              onPlay={() => setUri(userSong.data?.uri ?? null)}
+              isPlaying={userSong.data.id === playing?.id}
+              onPlay={() => setPlaying(userSong.data)}
             />
           ) : null}
           {feed.data?.map((song) => (
-            <FeedSong key={song.id} song={song} onPlay={() => setUri(song.uri)} />
+            <FeedSong
+              key={song.id}
+              song={song}
+              isPlaying={song.id === playing?.id}
+              onPlay={() => setPlaying(song)}
+            />
           ))}
         </ul>
       </section>
