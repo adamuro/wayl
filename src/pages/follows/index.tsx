@@ -81,7 +81,7 @@ const Follows: NextPage = () => {
 
   return (
     <>
-      <section className="sticky top-0 border-b border-neutral-700 bg-black p-4">
+      <section className="sticky top-0 z-50 border-b border-neutral-700 bg-black p-4">
         <header className="flex flex-col items-center gap-6">
           <h2 className="text-center text-3xl">
             Users you <span className="text-teal-400">follow</span>
