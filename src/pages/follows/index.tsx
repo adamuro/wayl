@@ -1,12 +1,12 @@
+import { useAuth } from '@clerk/nextjs';
+import { type User } from '@prisma/client';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useCallback, useMemo, useState } from 'react';
-import { LoadingSpinner } from '~/components/loading';
 import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
+import { LoadingSpinner } from '~/components/loading';
 import { UserSearchResultsSkeleton } from '~/components/skeleton';
-import { type RouterOutputs, api } from '~/utils/api';
-import { type User } from '@prisma/client';
-import { useAuth } from '@clerk/nextjs';
+import { api, type RouterOutputs } from '~/utils/api';
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact' });
 

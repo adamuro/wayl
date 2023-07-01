@@ -211,3 +211,82 @@ export const UserSearchResultsSkeleton = () => {
     </ul>
   );
 };
+
+export const IdeaSearchResultsSkeleton = () => {
+  return (
+    <ul>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/2 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/3 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/5 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/4 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/5 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/2 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/4 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/3 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/4 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/3 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/4 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+      <li className="flex animate-pulse cursor-pointer items-center gap-4 p-4 transition-colors hover:bg-neutral-900">
+        <div className="flex w-full items-center justify-between">
+          <div className="h-3 w-1/3 rounded-full bg-neutral-700"></div>
+          <div className="flex h-9 w-9 rounded-lg bg-neutral-700"></div>
+        </div>
+      </li>
+    </ul>
+  );
+};

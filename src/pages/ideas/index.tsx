@@ -1,12 +1,13 @@
 import { useAuth } from '@clerk/nextjs';
 import { Idea } from '@prisma/client';
 import type { NextPage } from 'next';
-import { useState, type FormEvent, useMemo, useCallback } from 'react';
+import { useCallback, useMemo, useState, type FormEvent } from 'react';
 import { IoPlay } from 'react-icons/io5';
+import { PiHeart, PiHeartFill } from 'react-icons/pi';
 import { LoadingSpinner } from '~/components/loading';
+import { IdeaSearchResultsSkeleton } from '~/components/skeleton';
 import { useIdeasCategory } from '~/hooks/ideas';
 import { api, type RouterOutputs } from '~/utils/api';
-import { PiHeart, PiHeartFill } from 'react-icons/pi';
 
 interface LikeIconProps {
   liked: boolean;
@@ -99,7 +100,7 @@ const Ideas: NextPage = () => {
 
   return (
     <>
-      <section className="sticky top-0 border-b border-neutral-700 bg-black">
+      <section className="sticky top-0 z-50 border-b border-neutral-700 bg-black">
         <header className="flex flex-col items-center gap-6 px-4 pt-4">
           <h2 className="text-center text-3xl">
             Theme <span className="text-teal-400">ideas</span>
@@ -146,9 +147,11 @@ const Ideas: NextPage = () => {
       </section>
       <section>
         <ul>
-          {ideas.data?.map((idea) => (
-            <Idea key={idea.id} idea={idea} onSuccess={refetchIdeas} />
-          ))}
+          {ideas.data ? (
+            ideas.data.map((idea) => <Idea key={idea.id} idea={idea} onSuccess={refetchIdeas} />)
+          ) : (
+            <IdeaSearchResultsSkeleton />
+          )}
         </ul>
       </section>
     </>
