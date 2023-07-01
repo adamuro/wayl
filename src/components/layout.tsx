@@ -98,7 +98,7 @@ export const PageLayout = (props: PropsWithChildren) => {
       <SignedIn>
         <div className="flex h-full flex-row justify-center">
           <Navigation />
-          <main className="w-full max-w-2xl flex-auto border-x border-neutral-700">
+          <main className="flex w-full max-w-2xl flex-auto flex-col border-x border-neutral-700">
             {props.children}
           </main>
           <aside className="flex-1"></aside>

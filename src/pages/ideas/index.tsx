@@ -3,11 +3,10 @@ import { Idea } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useState, type FormEvent, useMemo, useCallback } from 'react';
 import { IoPlay } from 'react-icons/io5';
-import { LoadingSpinnerMd, LoadingSpinnerSm } from '~/components/loading';
+import { LoadingSpinner } from '~/components/loading';
 import { useIdeasCategory } from '~/hooks/ideas';
 import { api, type RouterOutputs } from '~/utils/api';
 import { PiHeart, PiHeartFill } from 'react-icons/pi';
-import { If } from '~/components/condition';
 
 interface LikeIconProps {
   liked: boolean;
@@ -63,12 +62,11 @@ const Idea = ({ idea, onSuccess }: IdeaProps) => {
           onMouseOut={() => setHover(false)}
           className="group flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
         >
-          <If cond={actionsLoading}>
-            <LoadingSpinnerMd />
-          </If>
-          <If cond={!actionsLoading}>
+          {actionsLoading ? (
+            <LoadingSpinner className="p-0.5" />
+          ) : (
             <LikeIcon liked={Boolean(liked)} hover={hover} />
-          </If>
+          )}
         </button>
       </div>
     </li>
@@ -125,7 +123,7 @@ const Ideas: NextPage = () => {
               title={idea ? 'Post!' : 'Choose a song'}
               className="p-2 pr-3 text-xl transition-colors hover:text-teal-400 disabled:text-neutral-700"
             >
-              {createIdea.isLoading ? <LoadingSpinnerSm /> : <IoPlay />}
+              {createIdea.isLoading ? <LoadingSpinner /> : <IoPlay />}
             </button>
           </form>
         </header>

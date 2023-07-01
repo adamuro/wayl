@@ -1,8 +1,7 @@
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useCallback, useMemo, useState } from 'react';
-import { If } from '~/components/condition';
-import { LoadingSpinnerMd } from '~/components/loading';
+import { LoadingSpinner } from '~/components/loading';
 import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
 import { UserSearchResultsSkeleton } from '~/components/skeleton';
 import { type RouterOutputs, api } from '~/utils/api';
@@ -63,12 +62,13 @@ const UserResult = ({ user, onSuccess }: UserResultProps) => {
           title={actionsLoading ? '' : followed ? 'Unfollow' : 'Follow'}
           className="rounded-lg p-2 text-2xl text-neutral-50 transition-colors hover:bg-black hover:text-teal-400"
         >
-          <If cond={actionsLoading}>
-            <LoadingSpinnerMd />
-          </If>
-          <If cond={!actionsLoading}>
-            {followed && userId ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
-          </If>
+          {actionsLoading ? (
+            <LoadingSpinner className="p-0.5" />
+          ) : followed && userId ? (
+            <MdPersonRemoveAlt1 />
+          ) : (
+            <MdPersonAddAlt1 />
+          )}
         </button>
       </div>
     </li>
@@ -101,23 +101,19 @@ const Follows: NextPage = () => {
         </header>
       </section>
       <section>
-        <If cond={!users.data?.length}>
-          <If cond={users.isFetching}>
-            <UserSearchResultsSkeleton />
-          </If>
-          <If cond={!users.isFetching}>
-            <ul>
-              <li className="flex items-center justify-center p-4 text-xl">No results</li>
-            </ul>
-          </If>
-        </If>
-        <If cond={users.data?.length}>
+        {users.data?.length ? (
           <ul>
             {users.data?.map((user) => (
               <UserResult key={user.id} user={user} onSuccess={() => users.refetch()} />
             ))}
           </ul>
-        </If>
+        ) : users.isFetching ? (
+          <UserSearchResultsSkeleton />
+        ) : (
+          <ul>
+            <li className="flex items-center justify-center p-4 text-xl">No results</li>
+          </ul>
+        )}
       </section>
     </>
   );

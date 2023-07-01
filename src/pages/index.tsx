@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { IoPause, IoPlay } from 'react-icons/io5';
 import { If } from '~/components/condition';
-import { LoadingSpinnerSm } from '~/components/loading';
+import { LoadingSpinner } from '~/components/loading';
 import { Player } from '~/components/player';
 import { SongSearchResultsSkeleton } from '~/components/skeleton';
 import { useAudio } from '~/hooks/audio';
@@ -14,12 +14,13 @@ interface FeedSongProps {
   song: Song;
   isPlaying: boolean;
   onPlay: () => void;
+  onPause: () => void;
 }
 
-const FeedSong = ({ song, isPlaying, onPlay }: FeedSongProps) => {
+const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) => {
   return (
     <li className="flex items-center justify-between transition-colors hover:bg-neutral-900">
-      <div className="flex items-center gap-4 p-4 transition-colors hover:text-teal-400">
+      <div className="flex items-center gap-4 py-4 pl-4 transition-colors hover:text-teal-400">
         <div>
           <div className="w-9">
             <Image
@@ -52,20 +53,26 @@ const FeedSong = ({ song, isPlaying, onPlay }: FeedSongProps) => {
         </div>
         <div className="flex items-center">
           <div className="items h-10 w-10">
-            <button onClick={onPlay} className="group relative cursor-pointer hover:text-teal-400">
+            <button
+              onClick={isPlaying ? onPause : onPlay}
+              className="group relative cursor-pointer hover:text-teal-400"
+            >
               <Image
                 alt={`${song.title} album image`}
                 src={song.imageUrl || ''}
                 width={40}
                 height={40}
-                data-playing={isPlaying}
-                className="relative z-20 h-10 w-10 opacity-70 transition-opacity group-hover:opacity-30 data-[playing=true]:opacity-30"
+                className="relative z-20 h-10 w-10 transition-opacity group-hover:opacity-50"
               />
               <div
                 data-playing={isPlaying}
-                className="absolute top-0 z-20 flex h-10 w-10 items-center justify-center opacity-80 transition-opacity group-hover:opacity-100 data-[playing=true]:text-teal-400 data-[playing=true]:opacity-100"
+                className="absolute top-0 z-20 flex h-10 w-10 items-center justify-center opacity-80 transition-opacity group-hover:opacity-100  data-[playing=true]:opacity-100"
               >
-                <IoPlay className="text-2xl transition-colors" />
+                {isPlaying ? (
+                  <IoPause className="text-2xl transition-colors" />
+                ) : (
+                  <IoPlay className="text-2xl transition-colors" />
+                )}
               </div>
             </button>
           </div>
@@ -79,6 +86,7 @@ const Home: NextPage = () => {
   const [query, setQuery] = useState('');
   const [focus, setFocus] = useState(false);
   const [playing, setPlaying] = useState<Song | null>(null);
+  const [play, setPlay] = useState(false);
   const [song, setSong] = useState<SpotifyApi.TrackObjectFull | null>(null);
   const theme = api.themes.getActive.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
@@ -114,6 +122,11 @@ const Home: NextPage = () => {
 
     if (audio.current === song.id) return audio.switch();
     audio.play(song);
+  };
+
+  const handlePlaySong = (song: Song) => {
+    setPlaying(song);
+    setPlay(true);
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -169,12 +182,9 @@ const Home: NextPage = () => {
                 title={song ? 'Post!' : 'Choose a song'}
                 className="p-2 pr-3 text-xl transition-colors hover:text-teal-400 disabled:text-neutral-700"
               >
-                {createSong.isLoading || userSong.isLoading ? <LoadingSpinnerSm /> : <IoPlay />}
+                {createSong.isLoading || userSong.isLoading ? <LoadingSpinner /> : <IoPlay />}
               </button>
             </form>
-          </If>
-          <If cond={userSong.data}>
-            <Player uri={playing?.uri} />
           </If>
         </header>
         <If cond={focus && query}>
@@ -235,26 +245,38 @@ const Home: NextPage = () => {
           </div>
         </If>
       </section>
-      <section>
+      <section className="h-full">
         <ul className={userSong.data ? '' : 'pointer-events-none select-none blur-sm'}>
           {userSong.data ? (
             <FeedSong
               key={userSong.data.id}
               song={userSong.data}
-              isPlaying={userSong.data.id === playing?.id}
-              onPlay={() => setPlaying(userSong.data)}
+              isPlaying={play && userSong.data.id === playing?.id}
+              onPlay={() => (userSong.data ? handlePlaySong(userSong?.data) : null)}
+              onPause={() => setPlay(false)}
             />
           ) : null}
           {feed.data?.map((song) => (
             <FeedSong
               key={song.id}
               song={song}
-              isPlaying={song.id === playing?.id}
-              onPlay={() => setPlaying(song)}
+              isPlaying={play && song.id === playing?.id}
+              onPlay={() => handlePlaySong(song)}
+              onPause={() => setPlay(false)}
             />
           ))}
         </ul>
       </section>
+      <If cond={userSong.data}>
+        <section className="sticky bottom-0 z-50 flex border-t border-neutral-700 bg-black">
+          <Player
+            play={play}
+            onPlay={() => setPlay(true)}
+            onPause={() => setPlay(false)}
+            uri={playing?.uri}
+          />
+        </section>
+      </If>
     </>
   );
 };
