@@ -45,10 +45,12 @@ const Idea = ({ idea, onSuccess }: IdeaProps) => {
     [like.isLoading, unlike.isLoading],
   );
 
-  const action = useCallback(
-    () => (liked ? unlike.mutate({ id: idea.id }) : like.mutate({ id: idea.id })),
-    [liked, like, unlike, idea],
-  );
+  const action = useCallback(() => {
+    setHover(false);
+
+    if (liked) return unlike.mutate({ id: idea.id });
+    like.mutate({ id: idea.id });
+  }, [liked, like, unlike, idea]);
 
   return (
     <li key={idea.id} className="flex items-center justify-between p-4 hover:bg-neutral-900">

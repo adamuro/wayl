@@ -1,10 +1,18 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import { TRPCError } from '@trpc/server';
+import { Ratelimit } from '@upstash/ratelimit';
+import { Redis } from '@upstash/redis';
 import Spotify from 'spotify-web-api-node';
 import { z } from 'zod';
 import { createTRPCRouter, privateProcedure } from '~/server/api/trpc';
 
 const spotify = new Spotify();
+
+const ratelimit = new Ratelimit({
+  redis: Redis.fromEnv(),
+  limiter: Ratelimit.slidingWindow(50, '30s'),
+  analytics: true,
+});
 
 async function searchSongs(query: string): Promise<SpotifyApi.TrackObjectFull[]> {
   return new Promise((resolve) => {
@@ -22,6 +30,9 @@ export const spotifyRouter = createTRPCRouter({
     .input(z.object({ query: z.string() }))
     .query(async ({ input, ctx }) => {
       if (!input.query) return [];
+
+      const { success } = await ratelimit.limit(`spotify-${ctx.userId}`);
+      if (!success) throw new TRPCError({ code: 'TOO_MANY_REQUESTS' });
 
       const tokens = await clerkClient.users.getUserOauthAccessToken(ctx.userId, 'oauth_spotify');
       if (!tokens[0]) throw new TRPCError({ code: 'FORBIDDEN' });
