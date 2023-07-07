@@ -9,7 +9,7 @@ body {
 @layer utilities {
   *::-webkit-scrollbar {
     @apply w-1;
-    @apply h-1
+    @apply h-1;
   }
 
   body::-webkit-scrollbar-track {

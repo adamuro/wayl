@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 const DEFAULT_VOLUME = 0.2;
 
@@ -33,6 +33,13 @@ export const useAudio = (options?: AudioOptions) => {
 
   const switchAudio = useCallback(() => {
     audio?.paused ? void audio.play() : audio?.pause();
+  }, [audio]);
+
+  useEffect(() => {
+    return () => {
+      audio?.pause();
+      audio?.remove();
+    };
   }, [audio]);
 
   return {

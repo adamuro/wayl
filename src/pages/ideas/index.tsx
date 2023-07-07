@@ -1,80 +1,11 @@
-import { useAuth } from '@clerk/nextjs';
-import { Idea } from '@prisma/client';
 import type { NextPage } from 'next';
-import { useCallback, useMemo, useState, type FormEvent } from 'react';
+import { useState, type FormEvent } from 'react';
 import { IoPlay } from 'react-icons/io5';
-import { PiHeart, PiHeartFill } from 'react-icons/pi';
 import { LoadingSpinner } from '~/components/loading';
 import { IdeaSearchResultsSkeleton } from '~/components/skeleton';
 import { useIdeasCategory } from '~/hooks/ideas';
-import { api, type RouterOutputs } from '~/utils/api';
-
-interface LikeIconProps {
-  liked: boolean;
-  hover: boolean;
-}
-
-const LikeIcon = ({ liked, hover }: LikeIconProps) => {
-  return liked ? (
-    <PiHeartFill className="text-teal-400 transition-colors group-hover:text-neutral-50" />
-  ) : hover ? (
-    <PiHeartFill className="text-teal-400" />
-  ) : (
-    <PiHeart className="text-neutral-50" />
-  );
-};
-
-interface IdeaProps {
-  idea: RouterOutputs['ideas']['getLiked'][number] | RouterOutputs['ideas']['getLatest'][number];
-  onSuccess: (data: Idea, variables: { id: number }, context: unknown) => unknown;
-}
-
-const Idea = ({ idea, onSuccess }: IdeaProps) => {
-  const { userId } = useAuth();
-  const [hover, setHover] = useState(false);
-  const like = api.ideas.like.useMutation({ onSuccess });
-  const unlike = api.ideas.unlike.useMutation({ onSuccess });
-
-  const liked = useMemo(
-    () => userId && idea.upvoters.some(({ id }) => id === userId),
-    [idea, userId],
-  );
-
-  const actionsLoading = useMemo(
-    () => like.isLoading || unlike.isLoading,
-    [like.isLoading, unlike.isLoading],
-  );
-
-  const action = useCallback(() => {
-    setHover(false);
-
-    if (liked) return unlike.mutate({ id: idea.id });
-    like.mutate({ id: idea.id });
-  }, [liked, like, unlike, idea]);
-
-  return (
-    <li key={idea.id} className="flex items-center justify-between p-4 hover:bg-neutral-900">
-      <span className="first-letter:uppercase">{idea.content}</span>
-      <div className="flex items-center gap-2">
-        <span>{idea.upvoters.length}</span>
-        <button
-          onClick={action}
-          disabled={actionsLoading}
-          title={actionsLoading ? '' : liked ? 'Unlike' : 'Like'}
-          onMouseOver={() => setHover(true)}
-          onMouseOut={() => setHover(false)}
-          className="group flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
-        >
-          {actionsLoading ? (
-            <LoadingSpinner className="p-0.5" />
-          ) : (
-            <LikeIcon liked={Boolean(liked)} hover={hover} />
-          )}
-        </button>
-      </div>
-    </li>
-  );
-};
+import { api } from '~/utils/api';
+import { FeedIdea } from './feed';
 
 const Ideas: NextPage = () => {
   const category = useIdeasCategory();
@@ -150,7 +81,9 @@ const Ideas: NextPage = () => {
       <section>
         <ul>
           {ideas.data ? (
-            ideas.data.map((idea) => <Idea key={idea.id} idea={idea} onSuccess={refetchIdeas} />)
+            ideas.data.map((idea) => (
+              <FeedIdea key={idea.id} idea={idea} onSuccess={refetchIdeas} />
+            ))
           ) : (
             <IdeaSearchResultsSkeleton />
           )}
