@@ -1,7 +1,7 @@
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
 import Image from 'next/image';
-import { useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
+import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { IoPause, IoPlay } from 'react-icons/io5';
 import { Avatar } from '~/components/avatar';
 import { If } from '~/components/condition';
@@ -256,17 +256,6 @@ const Home: NextPage = () => {
   const feed = api.songs.getCurrentUserFeed.useQuery();
   const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
 
-  const headerSectionClassName = useMemo(
-    () =>
-      cn(
-        'sticky top-0 z-50 p-4',
-        userSong.data
-          ? 'border-b border-neutral-700 bg-black'
-          : 'bg-gradient-to-b from-black from-40% to-transparent',
-      ),
-    [userSong.data],
-  );
-
   const handlePlaySong = (song: FeedSong) => {
     setPlaying(song);
     setPlay(true);
@@ -274,7 +263,14 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <section className={headerSectionClassName}>
+      <section
+        className={cn(
+          'sticky top-0 z-50 p-4',
+          userSong.data
+            ? 'border-b border-neutral-700 bg-black'
+            : 'bg-gradient-to-b from-black from-40% to-transparent',
+        )}
+      >
         <Header />
       </section>
       <section className="h-full">
