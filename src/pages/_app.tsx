@@ -17,7 +17,12 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     >
       <Head>
         <title>Wayl</title>
-        <meta name="wayl" content="What are you listening to?" />
+        <meta name="author" content="Adam Turowski" />
+        <meta name="keywords" content="music, share, friends" />
+        <meta
+          name="description"
+          content="Share your favourite music with your friends. New theme dropping daily."
+        />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <PageLayout>
