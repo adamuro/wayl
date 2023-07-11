@@ -193,12 +193,14 @@ interface FeedSongProps {
 
 export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) => {
   return (
-    <li className="flex items-center justify-between transition-colors hover:bg-neutral-900">
-      <div className="flex items-center gap-4 py-4 pl-4 transition-colors hover:text-teal-400">
+    <li className="group flex items-center justify-between transition-colors hover:bg-neutral-900">
+      <div className="flex items-center gap-4 py-4 pl-4">
         <Avatar name={song.user.name} url={song.user.avatarUrl} />
         <div className="hidden w-full sm:flex">
           <div className="flex flex-col break-words">
-            <span className="font-semibold leading-5">{song.user.name}</span>
+            <span className="font-semibold leading-5 group-hover:text-teal-400">
+              {song.user.name}
+            </span>
             <span className="break-words text-xs text-neutral-50">
               {formatDistanceToNowStrict(song.createdAt)} ago
             </span>
@@ -210,7 +212,7 @@ export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) =>
           <div className="flex flex-col break-words">
             <span
               data-playing={isPlaying}
-              className="font-semibold leading-5 transition-colors data-[playing=true]:text-teal-400"
+              className="font-semibold leading-5 transition-colors group-hover:text-teal-400 data-[playing=true]:text-teal-400"
             >
               {song.title}
             </span>
@@ -221,18 +223,18 @@ export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) =>
           <div className="items h-10 w-10">
             <button
               onClick={isPlaying ? onPause : onPlay}
-              className="group relative cursor-pointer hover:text-teal-400"
+              className="group/play relative cursor-pointer hover:text-teal-400"
             >
               <Image
                 alt={`${song.title} album image`}
                 src={song.imageUrl || ''}
                 width={40}
                 height={40}
-                className="relative z-20 h-10 w-10 transition-opacity group-hover:opacity-50"
+                className="relative z-20 h-10 w-10 transition-opacity group-hover/play:opacity-50"
               />
               <div
                 data-playing={isPlaying}
-                className="absolute top-0 z-20 flex h-10 w-10 items-center justify-center opacity-80 transition-opacity group-hover:opacity-100  data-[playing=true]:opacity-100"
+                className="absolute top-0 z-20 flex h-10 w-10 items-center justify-center opacity-80 transition-opacity group-hover/play:opacity-100 data-[playing=true]:opacity-100"
               >
                 {isPlaying ? (
                   <IoPause className="text-2xl transition-colors" />

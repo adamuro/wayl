@@ -21,7 +21,12 @@ export const ideasRouter = createTRPCRouter({
           message: 'You have created too many ideas recently',
         });
 
-      return ctx.prisma.idea.create({ data: { content: input.content } });
+      return ctx.prisma.idea.create({
+        data: {
+          content: input.content,
+          authorId: ctx.userId,
+        },
+      });
     }),
   getLiked: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.idea.findMany({
@@ -29,6 +34,13 @@ export const ideasRouter = createTRPCRouter({
         id: true,
         content: true,
         upvoters: true,
+        createdAt: true,
+        author: {
+          select: {
+            name: true,
+            avatarUrl: true,
+          },
+        },
       },
       orderBy: {
         upvoters: {
@@ -43,6 +55,13 @@ export const ideasRouter = createTRPCRouter({
         id: true,
         content: true,
         upvoters: true,
+        createdAt: true,
+        author: {
+          select: {
+            name: true,
+            avatarUrl: true,
+          },
+        },
       },
       orderBy: {
         createdAt: 'desc',

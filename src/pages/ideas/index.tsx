@@ -1,9 +1,11 @@
 import { useAuth } from '@clerk/nextjs';
 import { type Idea } from '@prisma/client';
+import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
 import { useCallback, useMemo, useState, type FormEvent } from 'react';
 import { IoPlay } from 'react-icons/io5';
 import { PiHeart, PiHeartFill } from 'react-icons/pi';
+import { Avatar } from '~/components/avatar';
 import { LoadingSpinner } from '~/components/loading';
 import { IdeaSearchResultsSkeleton } from '~/components/skeleton';
 import { useIdeasCategory } from '~/hooks/ideas';
@@ -20,7 +22,7 @@ interface LikeIconProps {
 
 export const LikeIcon = ({ liked, hover }: LikeIconProps) => {
   return liked ? (
-    <PiHeartFill className="text-teal-400 transition-colors group-hover:text-neutral-50" />
+    <PiHeartFill className="text-teal-400 transition-colors group-hover/like:text-neutral-50" />
   ) : hover ? (
     <PiHeartFill className="text-teal-400" />
   ) : (
@@ -57,9 +59,19 @@ export const FeedIdea = ({ idea, onSuccess }: FeedIdeaProps) => {
   }, [liked, like, unlike, idea]);
 
   return (
-    <li key={idea.id} className="flex items-center justify-between p-4 hover:bg-neutral-900">
-      <span className="first-letter:uppercase">{idea.content}</span>
-      <div className="flex items-center gap-2">
+    <li key={idea.id} className="group flex items-center justify-between hover:bg-neutral-900">
+      <div className="flex items-center gap-4 py-4 pl-4">
+        <Avatar name={idea.author.name} url={idea.author.avatarUrl} />
+        <div className="flex flex-col break-words">
+          <span className="font-semibold leading-5 transition-colors group-hover:text-teal-400">
+            {idea.content}
+          </span>
+          <span className="break-words text-xs text-neutral-50">
+            {formatDistanceToNowStrict(idea.createdAt)} ago
+          </span>
+        </div>
+      </div>
+      <div className="flex items-center gap-2 p-4">
         <span>{idea.upvoters.length}</span>
         <button
           onClick={action}
@@ -67,7 +79,7 @@ export const FeedIdea = ({ idea, onSuccess }: FeedIdeaProps) => {
           title={actionsLoading ? '' : liked ? 'Unlike' : 'Like'}
           onMouseOver={() => setHover(true)}
           onMouseOut={() => setHover(false)}
-          className="group flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
+          className="group/like flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
         >
           {actionsLoading ? (
             <LoadingSpinner className="p-0.5" />
@@ -152,7 +164,7 @@ const Ideas: NextPage = () => {
         </div>
       </section>
       <section>
-        <ul>
+        <ul className="">
           {ideas.data ? (
             ideas.data.map((idea) => (
               <FeedIdea key={idea.id} idea={idea} onSuccess={refetchIdeas} />

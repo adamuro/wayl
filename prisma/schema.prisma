@@ -20,7 +20,8 @@ model User {
     roles     Role[] @default([USER])
     following User[] @relation("follows")
     followers User[] @relation("follows")
-    upvotes   Idea[]
+    ideas     Idea[] @relation("ideas")
+    upvotes   Idea[] @relation("upvotes")
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
@@ -57,7 +58,10 @@ model Theme {
 model Idea {
     id       Int    @id @default(autoincrement())
     content  String @unique
-    upvoters User[]
+    author   User   @relation("ideas", fields: [authorId], references: [id])
+    upvoters User[] @relation("upvotes")
+
+    authorId String
 
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
