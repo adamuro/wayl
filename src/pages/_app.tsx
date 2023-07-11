@@ -2,6 +2,7 @@ import { ClerkProvider } from '@clerk/nextjs';
 import { dark } from '@clerk/themes';
 import { type AppType } from 'next/app';
 import Head from 'next/head';
+import { Toaster } from 'react-hot-toast';
 import { PageLayout } from '~/components/layout';
 import '~/styles/globals.css';
 import { api } from '~/utils/api';
@@ -28,6 +29,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       <PageLayout>
         <Component {...pageProps} />
       </PageLayout>
+      <Toaster
+        position="bottom-center"
+        toastOptions={{
+          style: {
+            backgroundColor: '#171717',
+            color: 'white',
+          },
+        }}
+      />
     </ClerkProvider>
   );
 };
