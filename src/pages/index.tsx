@@ -1,14 +1,16 @@
+import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
+import Image from 'next/image';
 import { useMemo, useState, type ChangeEvent, type FormEvent } from 'react';
 import { IoPause, IoPlay } from 'react-icons/io5';
+import { Avatar } from '~/components/avatar';
 import { If } from '~/components/condition';
 import { LoadingSpinner } from '~/components/loading';
 import { Player } from '~/components/player';
 import { SongSearchResultsSkeleton } from '~/components/skeleton';
 import { useAudio } from '~/hooks/audio';
-import { type RouterOutputs, api } from '~/utils/api';
+import { api, type RouterOutputs } from '~/utils/api';
 import { cn } from '~/utils/cn';
-import Image from 'next/image';
 
 type FeedSong = RouterOutputs['songs']['getCurrentUserFeed'][number];
 type SpotifySong = RouterOutputs['spotify']['getSongs'][number];
@@ -193,21 +195,13 @@ export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) =>
   return (
     <li className="flex items-center justify-between transition-colors hover:bg-neutral-900">
       <div className="flex items-center gap-4 py-4 pl-4 transition-colors hover:text-teal-400">
-        <div>
-          <div className="w-9">
-            <Image
-              alt={`${song.user.name} profile picture`}
-              src={song.user.avatarUrl}
-              width={36}
-              height={36}
-              className="h-9 w-9 rounded-full"
-            />
-          </div>
-        </div>
+        <Avatar name={song.user.name} url={song.user.avatarUrl} />
         <div className="hidden w-full sm:flex">
           <div className="flex flex-col break-words">
             <span className="font-semibold leading-5">{song.user.name}</span>
-            <span className="break-words text-xs text-neutral-50">2h ago</span>
+            <span className="break-words text-xs text-neutral-50">
+              {formatDistanceToNowStrict(song.createdAt)} ago
+            </span>
           </div>
         </div>
       </div>

@@ -3,12 +3,11 @@ import { type Idea } from '@prisma/client';
 import type { NextPage } from 'next';
 import { useCallback, useMemo, useState, type FormEvent } from 'react';
 import { IoPlay } from 'react-icons/io5';
+import { PiHeart, PiHeartFill } from 'react-icons/pi';
 import { LoadingSpinner } from '~/components/loading';
 import { IdeaSearchResultsSkeleton } from '~/components/skeleton';
 import { useIdeasCategory } from '~/hooks/ideas';
 import { api, type RouterOutputs } from '~/utils/api';
-
-import { PiHeart, PiHeartFill } from 'react-icons/pi';
 
 type FeedIdea =
   | RouterOutputs['ideas']['getLiked'][number]

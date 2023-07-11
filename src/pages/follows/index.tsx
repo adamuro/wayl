@@ -1,9 +1,9 @@
 import { useAuth } from '@clerk/nextjs';
 import { type User } from '@prisma/client';
 import type { NextPage } from 'next';
-import Image from 'next/image';
 import { useCallback, useMemo, useState } from 'react';
 import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
+import { Avatar } from '~/components/avatar';
 import { LoadingSpinner } from '~/components/loading';
 import { UserSearchResultsSkeleton } from '~/components/skeleton';
 import { api, type RouterOutputs } from '~/utils/api';
@@ -37,17 +37,7 @@ const UserSearchResult = ({ user, onSuccess }: UserSearchResultProps) => {
 
   return (
     <li className="flex items-center gap-4 p-4 transition-colors hover:bg-neutral-900 hover:text-teal-400">
-      <div>
-        <div className="w-9">
-          <Image
-            alt={`${user.name} profile picture`}
-            src={user.avatarUrl}
-            width={36}
-            height={36}
-            className="h-9 w-9 rounded-full"
-          />
-        </div>
-      </div>
+      <Avatar name={user.name} url={user.avatarUrl} />
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col break-words">
           <span className="font-semibold leading-5">{user.name}</span>

@@ -44,6 +44,7 @@ export const songsRouter = createTRPCRouter({
         authors: true,
         imageUrl: true,
         uri: true,
+        createdAt: true,
         user: {
           select: {
             name: true,
@@ -79,6 +80,7 @@ export const songsRouter = createTRPCRouter({
         authors: true,
         imageUrl: true,
         uri: true,
+        createdAt: true,
         user: {
           select: {
             name: true,
