@@ -11,6 +11,7 @@ import { Avatar } from '~/components/avatar';
 import { LoadingSpinner } from '~/components/loading';
 import { IdeaSearchResultsSkeleton } from '~/components/skeleton';
 import { useIdeasCategory } from '~/hooks/ideas';
+import { useScroll } from '~/hooks/scroll';
 import { api, type RouterOutputs } from '~/utils/api';
 
 type FeedIdea =
@@ -97,7 +98,8 @@ export const FeedIdea = ({ idea, onSuccess }: FeedIdeaProps) => {
 
 const Ideas: NextPage = () => {
   const [idea, setIdea] = useState('');
-  const category = useIdeasCategory();
+  const scroll = useScroll();
+  const category = useIdeasCategory({ onSet: () => scroll.toTop() });
   const likedIdeas = api.ideas.getLiked.useQuery();
   const latestIdeas = api.ideas.getLatest.useQuery();
   const ideas = category.liked ? likedIdeas : latestIdeas;
