@@ -77,6 +77,7 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   );
 
   const handleLike = useCallback(() => {
+    setHover(false);
     const toggleLike = liked ? unlike : like;
     toggleLike.mutate({ id: idea.id });
   }, [idea, liked, like, unlike]);
