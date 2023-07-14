@@ -33,7 +33,11 @@ export const ideasRouter = createTRPCRouter({
       select: {
         id: true,
         content: true,
-        upvoters: true,
+        upvoters: {
+          select: {
+            id: true,
+          },
+        },
         createdAt: true,
         author: {
           select: {
@@ -54,7 +58,11 @@ export const ideasRouter = createTRPCRouter({
       select: {
         id: true,
         content: true,
-        upvoters: true,
+        upvoters: {
+          select: {
+            id: true,
+          },
+        },
         createdAt: true,
         author: {
           select: {

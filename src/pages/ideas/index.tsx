@@ -1,13 +1,11 @@
 import { useAuth } from '@clerk/nextjs';
-import { type Idea } from '@prisma/client';
-import { TRPCClientError } from '@trpc/client';
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
 import { useCallback, useMemo, useState, type FormEvent } from 'react';
 import { toast } from 'react-hot-toast';
 import { IoPlay } from 'react-icons/io5';
-import { PiHeart, PiHeartFill } from 'react-icons/pi';
 import { Avatar } from '~/components/avatar';
+import { LikeIcon } from '~/components/like';
 import { LoadingSpinner } from '~/components/loading';
 import { IdeaSearchResultsSkeleton } from '~/components/skeleton';
 import { useIdeasCategory } from '~/hooks/ideas';
@@ -18,49 +16,70 @@ type FeedIdea =
   | RouterOutputs['ideas']['getLiked'][number]
   | RouterOutputs['ideas']['getLatest'][number];
 
-interface LikeIconProps {
-  liked: boolean;
-  hover: boolean;
-}
-
-export const LikeIcon = ({ liked, hover }: LikeIconProps) => {
-  return liked ? (
-    <PiHeartFill className="text-teal-400 transition-colors group-hover/like:text-neutral-50" />
-  ) : hover ? (
-    <PiHeartFill className="text-teal-400" />
-  ) : (
-    <PiHeart className="text-neutral-50" />
-  );
-};
-
 interface FeedIdeaProps {
   idea: FeedIdea;
-  onSuccess: (data: Idea, variables: { id: number }, context: unknown) => unknown;
 }
 
-export const FeedIdea = ({ idea, onSuccess }: FeedIdeaProps) => {
+export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   const { userId } = useAuth();
   const [hover, setHover] = useState(false);
+  const trpc = api.useContext();
+
+  const onSettled = async () => {
+    await Promise.all([trpc.ideas.getLiked.invalidate(), trpc.ideas.getLatest.invalidate()]);
+  };
+
+  const like = api.ideas.like.useMutation({
+    onSettled,
+    onError: (error) => toast.error(error.message),
+    onMutate: async () => {
+      if (!userId) return;
+
+      await Promise.all([trpc.ideas.getLatest.cancel(), trpc.ideas.getLiked.cancel()]);
+      [trpc.ideas.getLiked, trpc.ideas.getLatest].forEach((query) => {
+        query.setData(undefined, (ideas) => {
+          const prevIdea = ideas?.find(({ id }) => id === idea.id);
+          if (!prevIdea || !ideas) return ideas;
+
+          return ideas.map((prev) =>
+            prev.id === idea.id ? { ...prev, upvoters: [...prev.upvoters, { id: userId }] } : prev,
+          );
+        });
+      });
+    },
+  });
+
+  const unlike = api.ideas.unlike.useMutation({
+    onSettled,
+    onError: (error) => toast.error(error.message),
+    onMutate: async () => {
+      if (!userId) return;
+
+      await Promise.all([trpc.ideas.getLatest.cancel(), trpc.ideas.getLiked.cancel()]);
+      [trpc.ideas.getLiked, trpc.ideas.getLatest].forEach((query) => {
+        query.setData(undefined, (ideas) => {
+          const prevIdea = ideas?.find(({ id }) => id === idea.id);
+          if (!prevIdea || !ideas) return ideas;
+
+          return ideas.map((prev) =>
+            prev.id === idea.id
+              ? { ...prev, upvoters: prev.upvoters.filter(({ id }) => id !== userId) }
+              : prev,
+          );
+        });
+      });
+    },
+  });
 
   const liked = useMemo(
     () => userId && idea.upvoters.some(({ id }) => id === userId),
     [idea, userId],
   );
 
-  const procedure = useMemo(() => (liked ? api.ideas.unlike : api.ideas.like), [liked]);
-  const toggleLike = procedure.useMutation({
-    onSuccess,
-    onError: (error) => {
-      if (error instanceof TRPCClientError) toast.error(error.message);
-      else toast.error('Something went wrong 💀');
-    },
-  });
-
   const handleLike = useCallback(() => {
-    setHover(false);
-
+    const toggleLike = liked ? unlike : like;
     toggleLike.mutate({ id: idea.id });
-  }, [toggleLike, idea, setHover]);
+  }, [idea, liked, like, unlike]);
 
   return (
     <li key={idea.id} className="group flex items-center justify-between hover:bg-neutral-900">
@@ -79,17 +98,12 @@ export const FeedIdea = ({ idea, onSuccess }: FeedIdeaProps) => {
         <span>{idea.upvoters.length}</span>
         <button
           onClick={handleLike}
-          disabled={toggleLike.isLoading}
-          title={toggleLike.isLoading ? '' : liked ? 'Unlike' : 'Like'}
+          title={liked ? 'Unlike' : 'Like'}
           onMouseOver={() => setHover(true)}
           onMouseOut={() => setHover(false)}
           className="group/like flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
         >
-          {toggleLike.isLoading ? (
-            <LoadingSpinner className="p-0.5" />
-          ) : (
-            <LikeIcon liked={Boolean(liked)} hover={hover} />
-          )}
+          <LikeIcon liked={liked} hover={hover} />
         </button>
       </div>
     </li>
@@ -107,17 +121,10 @@ const Ideas: NextPage = () => {
     onSuccess: async () => {
       setIdea('');
       toast.success('Idea created!');
-      await refetchIdeas();
+      await Promise.all([likedIdeas.refetch(), latestIdeas.refetch()]);
     },
-    onError: (error) => {
-      if (error instanceof TRPCClientError) toast.error(error.message);
-      else toast.error('Something went wrong 💀');
-    },
+    onError: (error) => toast.error(error.message),
   });
-
-  const refetchIdeas = async () => {
-    await Promise.all([likedIdeas.refetch(), latestIdeas.refetch()]);
-  };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -176,9 +183,7 @@ const Ideas: NextPage = () => {
       <section>
         <ul className="">
           {ideas.data ? (
-            ideas.data.map((idea) => (
-              <FeedIdea key={idea.id} idea={idea} onSuccess={refetchIdeas} />
-            ))
+            ideas.data.map((idea) => <FeedIdea key={idea.id} idea={idea} />)
           ) : (
             <IdeaSearchResultsSkeleton />
           )}
