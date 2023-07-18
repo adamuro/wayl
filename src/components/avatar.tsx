@@ -1,3 +1,6 @@
+/* Default avatar URL */
+/* https://www.freepik.com/icon/user_1077114#position=2&page=1&term=user&fromView=keyword */
+
 import Image from 'next/image';
 import { useState } from 'react';
 import avatarDefault from '~/assets/avatar-default.png';
