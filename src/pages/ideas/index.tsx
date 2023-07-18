@@ -31,7 +31,7 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
 
   const like = api.ideas.like.useMutation({
     onSettled,
-    onError: (error) => toast.error(error.message),
+    onError: (error) => toast.error(error.message || 'Something went wrong 💀'),
     onMutate: async () => {
       if (!userId) return;
 
@@ -51,7 +51,7 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
 
   const unlike = api.ideas.unlike.useMutation({
     onSettled,
-    onError: (error) => toast.error(error.message),
+    onError: (error) => toast.error(error.message || 'Something went wrong 💀'),
     onMutate: async () => {
       if (!userId) return;
 
@@ -121,10 +121,10 @@ const Ideas: NextPage = () => {
   const createIdea = api.ideas.create.useMutation({
     onSuccess: async () => {
       setIdea('');
-      toast.success('Idea created!');
+      toast.success('Cool idea!');
       await Promise.all([likedIdeas.refetch(), latestIdeas.refetch()]);
     },
-    onError: (error) => toast.error(error.message),
+    onError: (error) => toast.error(error.message || 'Something went wrong 💀'),
   });
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {

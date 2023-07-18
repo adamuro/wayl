@@ -18,7 +18,7 @@ export const ideasRouter = createTRPCRouter({
       if (!success)
         throw new TRPCError({
           code: 'TOO_MANY_REQUESTS',
-          message: 'You have created too many ideas recently',
+          message: 'You created too many ideas recently',
         });
 
       return ctx.prisma.idea.create({

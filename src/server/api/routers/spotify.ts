@@ -32,7 +32,11 @@ export const spotifyRouter = createTRPCRouter({
       if (!input.query) return [];
 
       const { success } = await ratelimit.limit(`spotify-${ctx.userId}`);
-      if (!success) throw new TRPCError({ code: 'TOO_MANY_REQUESTS' });
+      if (!success)
+        throw new TRPCError({
+          code: 'TOO_MANY_REQUESTS',
+          message: 'You performed too many searches recently',
+        });
 
       const tokens = await clerkClient.users.getUserOauthAccessToken(ctx.userId, 'oauth_spotify');
       if (!tokens[0]) throw new TRPCError({ code: 'FORBIDDEN' });

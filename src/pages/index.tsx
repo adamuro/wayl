@@ -2,6 +2,7 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { toast } from 'react-hot-toast';
 import { IoPause, IoPlay } from 'react-icons/io5';
 import { Avatar } from '~/components/avatar';
 import { If } from '~/components/condition';
@@ -102,7 +103,13 @@ const Header = () => {
   const theme = api.themes.getActive.useQuery();
   const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
-  const createSong = api.songs.create.useMutation({ onSuccess: () => userSong.refetch() });
+  const createSong = api.songs.create.useMutation({
+    onSuccess: async () => {
+      toast.success('Banger!');
+      await userSong.refetch();
+    },
+    onError: (error) => toast(error.message || 'Failed to post the song, please try again'),
+  });
 
   const handleChangeQuery = (e: ChangeEvent<HTMLInputElement>) => {
     setSong(null);
@@ -295,16 +302,14 @@ const Home: NextPage = () => {
           ))}
         </ul>
       </section>
-      <If cond={userSong.data}>
-        <section className="sticky bottom-0 z-50 flex border-t border-neutral-700 bg-black">
-          <Player
-            play={play}
-            onPlay={() => setPlay(true)}
-            onPause={() => setPlay(false)}
-            uri={playing?.uri}
-          />
-        </section>
-      </If>
+      <section className="sticky bottom-0 z-50 flex border-t border-neutral-700 bg-black">
+        <Player
+          play={play}
+          onPlay={() => setPlay(true)}
+          onPause={() => setPlay(false)}
+          uri={playing?.uri}
+        />
+      </section>
     </>
   );
 };

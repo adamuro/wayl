@@ -64,7 +64,11 @@ export const usersRouter = createTRPCRouter({
             id: true,
             name: true,
             avatarUrl: true,
-            followers: true,
+            followers: {
+              select: {
+                id: true,
+              },
+            },
           },
         });
 
