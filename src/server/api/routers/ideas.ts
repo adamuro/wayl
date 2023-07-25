@@ -2,7 +2,12 @@ import { TRPCError } from '@trpc/server';
 import { Ratelimit } from '@upstash/ratelimit';
 import { Redis } from '@upstash/redis';
 import { z } from 'zod';
-import { createTRPCRouter, privateProcedure, publicProcedure } from '~/server/api/trpc';
+import {
+  createTRPCRouter,
+  privateProcedure,
+  protectedProcedure,
+  publicProcedure,
+} from '~/server/api/trpc';
 
 const ratelimit = new Ratelimit({
   redis: Redis.fromEnv(),
@@ -104,4 +109,14 @@ export const ideasRouter = createTRPCRouter({
       },
     });
   }),
+  accept: protectedProcedure
+    .input(z.object({ id: z.number(), content: z.string().nonempty() }))
+    .mutation(async ({ ctx, input }) => {
+      const [theme] = await ctx.prisma.$transaction([
+        ctx.prisma.theme.create({ data: { content: input.content } }),
+        ctx.prisma.idea.delete({ where: { id: input.id } }),
+      ]);
+
+      return theme;
+    }),
 });

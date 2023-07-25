@@ -87,3 +87,14 @@ const authMiddleware = t.middleware(async ({ ctx, next }) => {
 });
 
 export const privateProcedure = t.procedure.use(authMiddleware);
+
+const adminMiddleware = t.middleware(async ({ ctx, next }) => {
+  if (!ctx.userId) throw new TRPCError({ code: 'UNAUTHORIZED' });
+
+  const user = await ctx.prisma.user.findUnique({ where: { id: ctx.userId } });
+  if (!user?.roles.includes('ADMIN')) throw new TRPCError({ code: 'FORBIDDEN' });
+
+  return next({ ctx: { userId: ctx.userId } });
+});
+
+export const protectedProcedure = t.procedure.use(adminMiddleware);

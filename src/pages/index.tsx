@@ -104,11 +104,11 @@ const Header = () => {
   const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
   const createSong = api.songs.create.useMutation({
+    onError: (error) => toast(error.message || 'Failed to post the song, please try again'),
     onSuccess: async () => {
       toast.success('Banger!');
       await userSong.refetch();
     },
-    onError: (error) => toast(error.message || 'Failed to post the song, please try again'),
   });
 
   const handleChangeQuery = (e: ChangeEvent<HTMLInputElement>) => {

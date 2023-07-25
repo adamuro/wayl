@@ -3,8 +3,9 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
 import { useCallback, useMemo, useState, type FormEvent } from 'react';
 import { toast } from 'react-hot-toast';
-import { IoPlay } from 'react-icons/io5';
+import { IoCheckmark, IoPlay } from 'react-icons/io5';
 import { Avatar } from '~/components/avatar';
+import { If } from '~/components/condition';
 import { LikeIcon } from '~/components/like';
 import { LoadingSpinner } from '~/components/loading';
 import { IdeaSearchResultsSkeleton } from '~/components/skeleton';
@@ -24,6 +25,14 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   const { userId } = useAuth();
   const [hover, setHover] = useState(false);
   const trpc = api.useContext();
+  const user = api.users.current.get.useQuery();
+  const accept = api.ideas.accept.useMutation({
+    onError: (error) => toast.error(error.message),
+    onSuccess: async () => {
+      toast.success('Idea accepted!');
+      await trpc.ideas.invalidate();
+    },
+  });
 
   const onSettled = async () => {
     await Promise.all([trpc.ideas.getLiked.invalidate(), trpc.ideas.getLatest.invalidate()]);
@@ -82,6 +91,8 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
     toggleLike.mutate({ id: idea.id });
   }, [idea, liked, like, unlike]);
 
+  const handleAccept = () => accept.mutate({ id: idea.id, content: idea.content });
+
   return (
     <li key={idea.id} className="group flex items-center justify-between hover:bg-neutral-900">
       <div className="flex items-center gap-4 py-4 pl-4">
@@ -106,6 +117,20 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
         >
           <LikeIcon liked={liked} hover={hover} />
         </button>
+        <If cond={user.data?.roles.includes('ADMIN')}>
+          <button
+            onClick={handleAccept}
+            disabled={accept.isLoading}
+            title={'Accept'}
+            className="group/accept flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
+          >
+            {accept.isLoading ? (
+              <LoadingSpinner className="p-0.5" />
+            ) : (
+              <IoCheckmark className="group-hover/accept:text-teal-400" />
+            )}
+          </button>
+        </If>
       </div>
     </li>
   );
