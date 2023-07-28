@@ -3,6 +3,7 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
 import { useCallback, useMemo, useState, type FormEvent } from 'react';
 import { toast } from 'react-hot-toast';
+import { IoMdTrash } from 'react-icons/io';
 import { IoCheckmark, IoPlay } from 'react-icons/io5';
 import { Avatar } from '~/components/avatar';
 import { If } from '~/components/condition';
@@ -30,6 +31,14 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
     onError: (error) => toast.error(error.message),
     onSuccess: async () => {
       toast.success('Idea accepted!');
+      await trpc.ideas.invalidate();
+    },
+  });
+
+  const remove = api.ideas.remove.useMutation({
+    onError: (error) => toast.error(error.message),
+    onSuccess: async () => {
+      toast.success('Idea deleted!');
       await trpc.ideas.invalidate();
     },
   });
@@ -92,6 +101,7 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   }, [idea, liked, like, unlike]);
 
   const handleAccept = () => accept.mutate({ id: idea.id, content: idea.content });
+  const handleRemove = () => remove.mutate({ id: idea.id });
 
   return (
     <li key={idea.id} className="group flex items-center justify-between hover:bg-neutral-900">
@@ -128,6 +138,18 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
               <LoadingSpinner className="p-0.5" />
             ) : (
               <IoCheckmark className="group-hover/accept:text-teal-400" />
+            )}
+          </button>
+          <button
+            onClick={handleRemove}
+            disabled={remove.isLoading}
+            title={'Remove'}
+            className="group/remove flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
+          >
+            {remove.isLoading ? (
+              <LoadingSpinner className="p-0.5" />
+            ) : (
+              <IoMdTrash className="group-hover/remove:text-teal-400" />
             )}
           </button>
         </If>

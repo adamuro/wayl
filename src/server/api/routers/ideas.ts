@@ -119,4 +119,9 @@ export const ideasRouter = createTRPCRouter({
 
       return theme;
     }),
+  remove: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.prisma.idea.delete({ where: { id: input.id } });
+    }),
 });
