@@ -202,7 +202,7 @@ export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) =>
   return (
     <li className="group flex items-center justify-between transition-colors hover:bg-neutral-900">
       <div className="flex items-center gap-4 py-4 pl-4">
-        <Avatar name={song.user.name} url={song.user.avatarUrl} />
+        <Avatar id={song.user.id} name={song.user.name} url={song.user.avatarUrl} />
         <div className="hidden w-full sm:flex">
           <div className="flex flex-col break-words">
             <span className="font-semibold leading-5 group-hover:text-teal-400">

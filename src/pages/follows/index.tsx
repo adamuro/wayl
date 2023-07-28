@@ -74,7 +74,7 @@ const UserSearchResult = ({ user, query, onSuccess }: UserSearchResultProps) => 
 
   return (
     <li className="flex items-center gap-4 p-4 transition-colors hover:bg-neutral-900 hover:text-teal-400">
-      <Avatar name={user.name} url={user.avatarUrl} />
+      <Avatar id={user.id} name={user.name} url={user.avatarUrl} />
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col break-words">
           <span className="font-semibold leading-5">{user.name}</span>

@@ -106,7 +106,7 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   return (
     <li key={idea.id} className="group flex items-center justify-between hover:bg-neutral-900">
       <div className="flex items-center gap-4 py-4 pl-4">
-        <Avatar name={idea.author.name} url={idea.author.avatarUrl} />
+        <Avatar id={idea.author.id} name={idea.author.name} url={idea.author.avatarUrl} />
         <div className="flex flex-col break-words">
           <span className="font-semibold leading-5 transition-colors group-hover:text-teal-400">
             {idea.content}

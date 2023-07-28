@@ -95,4 +95,22 @@ export const usersRouter = createTRPCRouter({
         },
       });
     }),
+  getFollowersById: privateProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      const user = await ctx.prisma.user.findUnique({
+        where: {
+          id: input.id,
+        },
+        select: {
+          followers: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      return user?.followers;
+    }),
 });

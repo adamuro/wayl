@@ -47,6 +47,7 @@ export const songsRouter = createTRPCRouter({
         createdAt: true,
         user: {
           select: {
+            id: true,
             name: true,
             avatarUrl: true,
           },
@@ -83,6 +84,7 @@ export const songsRouter = createTRPCRouter({
         createdAt: true,
         user: {
           select: {
+            id: true,
             name: true,
             avatarUrl: true,
           },

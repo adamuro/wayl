@@ -46,6 +46,7 @@ export const ideasRouter = createTRPCRouter({
         createdAt: true,
         author: {
           select: {
+            id: true,
             name: true,
             avatarUrl: true,
           },
@@ -71,6 +72,7 @@ export const ideasRouter = createTRPCRouter({
         createdAt: true,
         author: {
           select: {
+            id: true,
             name: true,
             avatarUrl: true,
           },
