@@ -61,15 +61,12 @@ export const ideasRouter = createTRPCRouter({
   }),
   getLatest: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.idea.findMany({
-      select: {
-        id: true,
-        content: true,
+      include: {
         upvoters: {
           select: {
             id: true,
           },
         },
-        createdAt: true,
         author: {
           select: {
             id: true,

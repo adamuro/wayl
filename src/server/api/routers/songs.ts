@@ -38,13 +38,7 @@ export const songsRouter = createTRPCRouter({
         theme: { active: true },
         createdAt: { gte: theme.date },
       },
-      select: {
-        id: true,
-        title: true,
-        authors: true,
-        imageUrl: true,
-        uri: true,
-        createdAt: true,
+      include: {
         user: {
           select: {
             id: true,
@@ -75,13 +69,7 @@ export const songsRouter = createTRPCRouter({
           },
         },
       },
-      select: {
-        id: true,
-        title: true,
-        authors: true,
-        imageUrl: true,
-        uri: true,
-        createdAt: true,
+      include: {
         user: {
           select: {
             id: true,
