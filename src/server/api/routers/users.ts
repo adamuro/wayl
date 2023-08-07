@@ -48,6 +48,16 @@ const currentUserRouter = createTRPCRouter({
 
 export const usersRouter = createTRPCRouter({
   current: currentUserRouter,
+  getById: privateProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.user.findUnique({
+      where: {
+        id: input.id,
+      },
+      include: {
+        songs: true,
+      },
+    });
+  }),
   getByName: privateProcedure
     .input(z.object({ name: z.string() }))
     .query(async ({ ctx, input }) => {
