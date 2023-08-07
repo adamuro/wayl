@@ -9,6 +9,7 @@ import { If } from '~/components/condition';
 import { LoadingSpinner } from '~/components/loading';
 import { Player } from '~/components/player';
 import { SongSearchResultsSkeleton } from '~/components/skeleton';
+import { UserTooltip } from '~/components/tooltip';
 import { useAudio } from '~/hooks/audio';
 import { api, type RouterOutputs } from '~/utils/api';
 import { cn } from '~/utils/cn';
@@ -199,15 +200,27 @@ interface FeedSongProps {
 }
 
 export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) => {
+  const anchorId = `${song.user.id}-anchor`;
+
   return (
     <li className="group flex items-center justify-between transition-colors hover:bg-neutral-900">
       <div className="flex items-center gap-4 py-4 pl-4">
         <Avatar id={song.user.id} name={song.user.name} url={song.user.avatarUrl} />
         <div className="hidden w-full sm:flex">
           <div className="flex flex-col break-words">
-            <span className="font-semibold leading-5 group-hover:text-teal-400">
+            <span
+              id={anchorId}
+              className="w-fit cursor-pointer font-semibold leading-5 group-hover:text-teal-400"
+            >
               {song.user.name}
             </span>
+            <UserTooltip
+              id={song.user.id}
+              anchorId={anchorId}
+              name={song.user.name}
+              place="bottom-start"
+              offset={2}
+            />
             <span className="break-words text-xs text-neutral-50">
               {formatDistanceToNowStrict(song.createdAt)} ago
             </span>

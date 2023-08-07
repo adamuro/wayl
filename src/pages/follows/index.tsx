@@ -6,6 +6,7 @@ import { toast } from 'react-hot-toast';
 import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
 import { Avatar } from '~/components/avatar';
 import { UserSearchResultsSkeleton } from '~/components/skeleton';
+import { UserTooltip } from '~/components/tooltip';
 import { api, type RouterOutputs } from '~/utils/api';
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact' });
@@ -19,6 +20,7 @@ interface UserSearchResultProps {
 const UserSearchResult = ({ user, query, onSuccess }: UserSearchResultProps) => {
   const trpc = api.useContext();
   const { userId } = useAuth();
+  const anchorId = `${user.id}-anchor`;
 
   const follow = api.users.current.follow.useMutation({
     onSuccess,
@@ -77,7 +79,16 @@ const UserSearchResult = ({ user, query, onSuccess }: UserSearchResultProps) => 
       <Avatar id={user.id} name={user.name} url={user.avatarUrl} />
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col break-words">
-          <span className="font-semibold leading-5">{user.name}</span>
+          <span id={anchorId} className="cursor-pointer font-semibold leading-5">
+            {user.name}
+          </span>
+          <UserTooltip
+            id={user.id}
+            anchorId={anchorId}
+            name={user.name}
+            place="bottom-start"
+            offset={2}
+          />
           <span className="break-words text-xs text-neutral-50">
             {formatter.format(user.followers.length)}
             {user.followers.length === 1 ? ' follower' : ' followers'}
