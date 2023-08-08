@@ -4,6 +4,7 @@ import { toast } from 'react-hot-toast';
 import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
 import { Tooltip, type PlacesType } from 'react-tooltip';
 import { api } from '~/utils/api';
+import { If } from './condition';
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact' });
 
@@ -81,13 +82,15 @@ export const UserTooltip = (props: UserTooltipProps) => {
             {followers.data?.length === 1 ? ' follower' : ' followers'}
           </span>
         </div>
-        <button
-          onClick={handleFollow}
-          title={followed ? 'Unfollow' : 'Follow'}
-          className="rounded-lg p-2 text-2xl text-neutral-50 transition-colors hover:bg-neutral-900 hover:text-teal-400"
-        >
-          {followed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
-        </button>
+        <If cond={userId !== props.id}>
+          <button
+            onClick={handleFollow}
+            title={followed ? 'Unfollow' : 'Follow'}
+            className="rounded-lg p-2 text-2xl text-neutral-50 transition-colors hover:bg-neutral-900 hover:text-teal-400"
+          >
+            {followed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
+          </button>
+        </If>
       </div>
     </Tooltip>
   );
