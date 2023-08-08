@@ -1,4 +1,4 @@
-import { type NextPage, type GetStaticProps } from 'next';
+import { type GetStaticProps, type NextPage } from 'next';
 import { api } from '~/utils/api';
 
 const UserProfile: NextPage<{ id: string }> = ({ id }) => {
@@ -16,7 +16,7 @@ export const getStaticProps: GetStaticProps = (context) => {
 
   return {
     props: {
-      id,
+      id: `user_${id}`,
     },
   };
 };

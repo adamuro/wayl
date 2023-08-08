@@ -1,9 +1,11 @@
 import { useAuth } from '@clerk/nextjs';
+import Link from 'next/link';
 import { useCallback, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
 import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
 import { Tooltip, type PlacesType } from 'react-tooltip';
 import { api } from '~/utils/api';
+import { profileLink } from '~/utils/user';
 import { If } from './condition';
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact' });
@@ -76,7 +78,9 @@ export const UserTooltip = (props: UserTooltipProps) => {
     >
       <div className="z-50 flex w-full items-center gap-4">
         <div className="flex flex-col break-words">
-          <span className="font-semibold leading-5 text-teal-400">{props.name}</span>
+          <Link href={profileLink(props.id)} className="font-semibold leading-5 text-teal-400">
+            {props.name}
+          </Link>
           <span className="break-words text-xs">
             {followers.data ? formatter.format(followers.data.length) : ''}
             {followers.data?.length === 1 ? ' follower' : ' followers'}

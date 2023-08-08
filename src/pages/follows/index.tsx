@@ -1,6 +1,7 @@
 import { useAuth } from '@clerk/nextjs';
 import { type User } from '@prisma/client';
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import { useCallback, useMemo, useState } from 'react';
 import { toast } from 'react-hot-toast';
 import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
@@ -8,6 +9,7 @@ import { Avatar } from '~/components/avatar';
 import { UserSearchResultsSkeleton } from '~/components/skeleton';
 import { UserTooltip } from '~/components/tooltip';
 import { api, type RouterOutputs } from '~/utils/api';
+import { profileLink } from '~/utils/user';
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact' });
 
@@ -79,9 +81,13 @@ const UserSearchResult = ({ user, query, onSuccess }: UserSearchResultProps) => 
       <Avatar id={user.id} name={user.name} url={user.avatarUrl} />
       <div className="flex w-full items-center justify-between">
         <div className="flex flex-col break-words">
-          <span id={anchorId} className="cursor-pointer font-semibold leading-5">
+          <Link
+            href={profileLink(user.id)}
+            id={anchorId}
+            className="w-fit cursor-pointer font-semibold leading-5"
+          >
             {user.name}
-          </span>
+          </Link>
           <UserTooltip
             id={user.id}
             anchorId={anchorId}

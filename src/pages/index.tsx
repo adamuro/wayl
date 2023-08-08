@@ -1,6 +1,7 @@
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, type ChangeEvent, type FormEvent } from 'react';
 import { toast } from 'react-hot-toast';
 import { IoPause, IoPlay } from 'react-icons/io5';
@@ -13,6 +14,7 @@ import { UserTooltip } from '~/components/tooltip';
 import { useAudio } from '~/hooks/audio';
 import { api, type RouterOutputs } from '~/utils/api';
 import { cn } from '~/utils/cn';
+import { profileLink } from '~/utils/user';
 
 type FeedSong = RouterOutputs['songs']['getCurrentUserFeed'][number];
 type SpotifySong = RouterOutputs['spotify']['getSongs'][number];
@@ -208,12 +210,13 @@ export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) =>
         <Avatar id={song.user.id} name={song.user.name} url={song.user.avatarUrl} />
         <div className="hidden w-full sm:flex">
           <div className="flex flex-col break-words">
-            <span
+            <Link
+              href={profileLink(song.user.id)}
               id={anchorId}
               className="w-fit cursor-pointer font-semibold leading-5 group-hover:text-teal-400"
             >
               {song.user.name}
-            </span>
+            </Link>
             <UserTooltip
               id={song.user.id}
               anchorId={anchorId}
