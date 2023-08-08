@@ -8,13 +8,14 @@ import { UserTooltip } from './tooltip';
 
 interface AvatarProps {
   id: string;
+  anchorId?: string;
   name: string;
   url: string;
 }
 
 export const Avatar = (props: AvatarProps) => {
   const [error, setError] = useState(false);
-  const anchorId = `${props.id}-avatar`;
+  const anchorId = props.anchorId || `${props.id}-avatar`;
 
   return (
     <>

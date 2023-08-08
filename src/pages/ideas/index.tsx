@@ -27,6 +27,8 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   const [hover, setHover] = useState(false);
   const trpc = api.useContext();
   const user = api.users.current.get.useQuery();
+  const anchorId = `${idea.authorId}-${idea.id}-anchor`;
+
   const accept = api.ideas.accept.useMutation({
     onError: (error) => toast.error(error.message),
     onSuccess: async () => {
@@ -104,9 +106,14 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   const handleRemove = () => remove.mutate({ id: idea.id });
 
   return (
-    <li key={idea.id} className="group flex items-center justify-between hover:bg-neutral-900">
+    <li className="group flex items-center justify-between hover:bg-neutral-900">
       <div className="flex items-center gap-4 py-4 pl-4">
-        <Avatar id={idea.author.id} name={idea.author.name} url={idea.author.avatarUrl} />
+        <Avatar
+          id={idea.authorId}
+          anchorId={anchorId}
+          name={idea.author.name}
+          url={idea.author.avatarUrl}
+        />
         <div className="flex flex-col break-words">
           <span className="font-semibold leading-5 transition-colors group-hover:text-teal-400">
             {idea.content}
@@ -229,7 +236,7 @@ const Ideas: NextPage = () => {
         </div>
       </section>
       <section>
-        <ul className="">
+        <ul>
           {ideas.data ? (
             ideas.data.map((idea) => <FeedIdea key={idea.id} idea={idea} />)
           ) : (
