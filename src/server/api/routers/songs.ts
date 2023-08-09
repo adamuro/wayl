@@ -6,6 +6,19 @@ export const songsRouter = createTRPCRouter({
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.prisma.song.findMany();
   }),
+  getByUserId: privateProcedure.input(z.object({ id: z.string() })).query(({ ctx, input }) => {
+    return ctx.prisma.song.findMany({
+      where: {
+        userId: input.id,
+      },
+      include: {
+        theme: true,
+      },
+      orderBy: {
+        createdAt: 'desc',
+      },
+    });
+  }),
   create: privateProcedure
     .input(
       z.object({

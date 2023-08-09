@@ -54,7 +54,16 @@ export const usersRouter = createTRPCRouter({
         id: input.id,
       },
       include: {
-        songs: true,
+        followers: {
+          select: {
+            id: true,
+          },
+        },
+        _count: {
+          select: {
+            songs: true,
+          },
+        },
       },
     });
   }),
