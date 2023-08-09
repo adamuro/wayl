@@ -1,29 +1,28 @@
+import { useState } from 'react';
 import SpotifyPlayer, { type CallbackState } from 'react-spotify-web-playback';
+import { usePlayer } from '~/hooks/player';
 import { api } from '~/utils/api';
 
-interface PlayerProps {
-  play: boolean;
-  onPlay: () => void;
-  onPause: () => void;
-  uri?: string;
-}
-
-export const Player = ({ play, onPlay, onPause, uri }: PlayerProps) => {
+export const Player = () => {
+  const [wasPlaying, setWasPlaying] = useState(false);
+  const player = usePlayer();
+  const changedOutside = wasPlaying !== player.isPlaying;
   const token = api.spotify.getToken.useQuery();
 
   const callback = (state: CallbackState) => {
-    if (state.isPlaying) return onPlay();
-    onPause();
+    if (changedOutside) return setWasPlaying(player.isPlaying ?? false);
+    player.setIsPlaying?.(state.isPlaying);
+    setWasPlaying(state.isPlaying);
   };
 
   if (!token.data) return null;
 
   return (
     <SpotifyPlayer
-      play={play}
+      play={player.isPlaying}
       callback={callback}
       token={token.data}
-      uris={uri ? [uri] : []}
+      uris={player.uri ? [player.uri] : []}
       showSaveIcon
       hideAttribution={true}
       styles={{

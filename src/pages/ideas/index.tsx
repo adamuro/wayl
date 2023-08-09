@@ -235,7 +235,7 @@ const Ideas: NextPage = () => {
           </button>
         </div>
       </section>
-      <section>
+      <section className="h-full">
         <ul>
           {ideas.data ? (
             ideas.data.map((idea) => <FeedIdea key={idea.id} idea={idea} />)

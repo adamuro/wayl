@@ -8,6 +8,7 @@ import { MdPeople, MdPeopleOutline } from 'react-icons/md';
 import { useDevice } from '~/hooks/device';
 import { useRefPosition } from '~/hooks/position';
 import { Path } from './path';
+import { Player } from './player';
 
 interface NavigationItemProps {
   name: string;
@@ -100,6 +101,9 @@ export const PageLayout = (props: PropsWithChildren) => {
           <Navigation />
           <main className="flex w-full max-w-2xl flex-auto flex-col border-x border-neutral-700">
             {props.children}
+            <section className="sticky bottom-0 z-50 flex border-t border-neutral-700 bg-black">
+              <Player />
+            </section>
           </main>
           <aside className="flex-1"></aside>
         </div>

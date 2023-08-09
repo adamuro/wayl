@@ -2,16 +2,16 @@ import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
 import type { NextPage } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, type ChangeEvent, type FormEvent } from 'react';
+import { useState, type ChangeEvent, type FormEvent, useMemo } from 'react';
 import { toast } from 'react-hot-toast';
 import { IoPause, IoPlay } from 'react-icons/io5';
 import { Avatar } from '~/components/avatar';
 import { If } from '~/components/condition';
 import { LoadingSpinner } from '~/components/loading';
-import { Player } from '~/components/player';
 import { SongSearchResultsSkeleton } from '~/components/skeleton';
 import { UserTooltip } from '~/components/tooltip';
 import { useAudio } from '~/hooks/audio';
+import { usePlayer } from '~/hooks/player';
 import { api, type RouterOutputs } from '~/utils/api';
 import { cn } from '~/utils/cn';
 import { profileLink } from '~/utils/user';
@@ -196,12 +196,11 @@ const Header = () => {
 
 interface FeedSongProps {
   song: FeedSong;
-  isPlaying: boolean;
-  onPlay: () => void;
-  onPause: () => void;
 }
 
-export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) => {
+export const FeedSong = ({ song }: FeedSongProps) => {
+  const player = usePlayer();
+  const isPlaying = useMemo(() => player.isPlaying && song.id === player.id, [song, player]);
   const anchorId = `${song.user.id}-anchor`;
 
   return (
@@ -245,7 +244,7 @@ export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) =>
         <div className="flex items-center">
           <div className="items h-10 w-10">
             <button
-              onClick={isPlaying ? onPause : onPlay}
+              onClick={() => (isPlaying ? player.pause() : player.play(song.id, song.uri))}
               className="group/play relative cursor-pointer hover:text-teal-400"
             >
               <Image
@@ -274,15 +273,8 @@ export const FeedSong = ({ song, isPlaying, onPlay, onPause }: FeedSongProps) =>
 };
 
 const Home: NextPage = () => {
-  const [playing, setPlaying] = useState<FeedSong | null>(null);
-  const [play, setPlay] = useState(false);
   const feed = api.songs.getCurrentUserFeed.useQuery();
   const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
-
-  const handlePlaySong = (song: FeedSong) => {
-    setPlaying(song);
-    setPlay(true);
-  };
 
   return (
     <>
@@ -298,33 +290,11 @@ const Home: NextPage = () => {
       </section>
       <section className="h-full">
         <ul className={userSong.data ? '' : 'pointer-events-none select-none blur-sm'}>
-          {userSong.data ? (
-            <FeedSong
-              key={userSong.data.id}
-              song={userSong.data}
-              isPlaying={play && userSong.data.id === playing?.id}
-              onPlay={() => (userSong.data ? handlePlaySong(userSong?.data) : null)}
-              onPause={() => setPlay(false)}
-            />
-          ) : null}
+          {userSong.data ? <FeedSong key={userSong.data.id} song={userSong.data} /> : null}
           {feed.data?.map((song) => (
-            <FeedSong
-              key={song.id}
-              song={song}
-              isPlaying={play && song.id === playing?.id}
-              onPlay={() => handlePlaySong(song)}
-              onPause={() => setPlay(false)}
-            />
+            <FeedSong key={song.id} song={song} />
           ))}
         </ul>
-      </section>
-      <section className="sticky bottom-0 z-50 flex border-t border-neutral-700 bg-black">
-        <Player
-          play={play}
-          onPlay={() => setPlay(true)}
-          onPause={() => setPlay(false)}
-          uri={playing?.uri}
-        />
       </section>
     </>
   );

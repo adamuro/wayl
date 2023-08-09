@@ -1,36 +1,38 @@
-import { type GetStaticProps, type NextPage } from 'next';
+import { useAuth } from '@clerk/nextjs';
 import formatDistanceToNowStrict from 'date-fns/formatDistanceToNowStrict';
+import { type GetStaticProps, type NextPage } from 'next';
 import Image from 'next/image';
 import { useCallback, useMemo, useState } from 'react';
-import avatarDefault from '~/assets/avatar-default.png';
-import { Player } from '~/components/player';
-import { type RouterOutputs, api } from '~/utils/api';
-import { IoPause, IoPlay } from 'react-icons/io5';
-import { useAuth } from '@clerk/nextjs';
 import { toast } from 'react-hot-toast';
+import { IoPause, IoPlay } from 'react-icons/io5';
 import { MdPersonAddAlt1, MdPersonRemoveAlt1 } from 'react-icons/md';
+import avatarDefault from '~/assets/avatar-default.png';
 import { If } from '~/components/condition';
 import { UserProfileHeaderSkeleton } from '~/components/skeleton';
+import { usePlayer } from '~/hooks/player';
+import { api, type RouterOutputs } from '~/utils/api';
 
 const formatter = Intl.NumberFormat('en', { notation: 'compact' });
 
 type Song = RouterOutputs['songs']['getByUserId'][number];
-
 interface SongProps {
   song: Song;
-  isPlaying: boolean;
-  onPlay: () => void;
-  onPause: () => void;
 }
 
-export const FeedSong = ({ song, isPlaying, onPlay, onPause }: SongProps) => {
+export const FeedSong = ({ song }: SongProps) => {
+  const player = usePlayer();
+  const isPlaying = useMemo(
+    () => player.isPlaying && song.id === player.id,
+    [song, player.id, player.isPlaying],
+  );
+
   return (
     <li className="group flex items-center justify-between transition-colors hover:bg-neutral-900">
       <div className="flex items-center gap-4 p-4">
         <div className="flex items-center">
           <div className="items h-10 w-10">
             <button
-              onClick={isPlaying ? onPause : onPlay}
+              onClick={() => (isPlaying ? player.pause() : player.play(song.id, song.uri))}
               className="group/play relative cursor-pointer hover:text-teal-400"
             >
               <Image
@@ -84,8 +86,6 @@ export const FeedSong = ({ song, isPlaying, onPlay, onPause }: SongProps) => {
 const UserProfile: NextPage<{ id: string }> = ({ id }) => {
   const { userId } = useAuth();
   const [error, setError] = useState(false);
-  const [play, setPlay] = useState(false);
-  const [playing, setPlaying] = useState<Song | null>(null);
   const trpc = api.useContext();
   const user = api.users.getById.useQuery({ id });
   const songs = api.songs.getByUserId.useQuery({ id });
@@ -129,11 +129,6 @@ const UserProfile: NextPage<{ id: string }> = ({ id }) => {
     const toggleFollow = followed ? unfollow : follow;
     toggleFollow.mutate({ id });
   }, [id, followed, follow, unfollow]);
-
-  const handlePlaySong = (song: Song) => {
-    setPlaying(song);
-    setPlay(true);
-  };
 
   return (
     <>
@@ -179,23 +174,9 @@ const UserProfile: NextPage<{ id: string }> = ({ id }) => {
       <section className="h-full">
         <ul>
           {songs.data?.map((song) => (
-            <FeedSong
-              key={song.id}
-              song={song}
-              isPlaying={play && song.id === playing?.id}
-              onPlay={() => handlePlaySong(song)}
-              onPause={() => setPlay(false)}
-            />
+            <FeedSong key={song.id} song={song} />
           ))}
         </ul>
-      </section>
-      <section className="sticky bottom-0 z-50 flex border-t border-neutral-700 bg-black">
-        <Player
-          play={play}
-          onPlay={() => setPlay(true)}
-          onPause={() => setPlay(false)}
-          uri={playing?.uri}
-        />
       </section>
     </>
   );

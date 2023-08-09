@@ -137,7 +137,7 @@ const Follows: NextPage = () => {
           </form>
         </header>
       </section>
-      <section>
+      <section className="h-full">
         <ul>
           {users.data?.length ? (
             users.data?.map((user) => (
