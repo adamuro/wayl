@@ -3,7 +3,24 @@ name: CI
 on: [push, pull_request]
 
 env:
-  DATABASE_URL: 'https://not-db-url.com'
+  NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: 'clerk-key'
+
+  CLERK_SECRET_KEY: 'clerk-secret'
+  CLERK_WEBHOOK_SECRET_KEY: 'clerk-webhook'
+
+  POSTGRES_URL: 'https://psql.com'
+  POSTGRES_PRISMA_URL: 'https://psql.com'
+  POSTGRES_URL_NON_POOLING: 'https://psql.com'
+  POSTGRES_USER: 'psql-user'
+  POSTGRES_HOST: 'psql-host'
+  POSTGRES_PASSWORD: 'psql-password'
+  POSTGRES_DATABASE: 'psql-db'
+
+  QSTASH_CURRENT_SIGNING_KEY: 'qstash-key'
+  QSTASH_NEXT_SIGNING_KEY: 'qstash-next'
+
+  UPSTASH_REDIS_REST_URL: 'https://redis.com'
+  UPSTASH_REDIS_REST_TOKEN: 'redis-token'
 
 jobs:
   build:
