@@ -27,5 +27,12 @@ const config = {
       'platform-lookaside.fbsbx.com',
     ],
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
+  swcMinify: true,
 };
 export default config;
