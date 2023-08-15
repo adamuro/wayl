@@ -47,11 +47,6 @@ interface SongSearchResultsProps {
 const SongSearchResults = ({ songs, onSelect }: SongSearchResultsProps) => {
   const audio = useAudio();
 
-  const handleSelect = (song: SpotifySong) => {
-    audio.pause();
-    onSelect(song);
-  };
-
   const handlePreview = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, song: SpotifySong) => {
     e.preventDefault();
     e.stopPropagation();
@@ -64,7 +59,7 @@ const SongSearchResults = ({ songs, onSelect }: SongSearchResultsProps) => {
   return songs.map((song) => (
     <li
       key={song.id}
-      onMouseDown={() => handleSelect(song)}
+      onMouseDown={() => onSelect(song)}
       className="flex cursor-pointer items-center gap-4 py-2 pl-4 transition-colors hover:bg-neutral-900 hover:text-teal-400"
     >
       <Image
@@ -102,7 +97,6 @@ const Header = () => {
   const [query, setQuery] = useState('');
   const [song, setSong] = useState<SpotifySong | null>(null);
   const [focus, setFocus] = useState(false);
-  const audio = useAudio();
   const theme = api.themes.getActive.useQuery();
   const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
@@ -117,12 +111,6 @@ const Header = () => {
   const handleChangeQuery = (e: ChangeEvent<HTMLInputElement>) => {
     setSong(null);
     setQuery(e.target.value);
-    audio.pause();
-  };
-
-  const handleBlur = () => {
-    setFocus(false);
-    audio.pause();
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -141,7 +129,6 @@ const Header = () => {
   const handleSelectSong = (song: SpotifySong) => {
     setSong(song);
     setQuery(song.name);
-    audio.pause();
   };
 
   return (
@@ -160,7 +147,7 @@ const Header = () => {
               value={query}
               required
               onFocus={() => setFocus(true)}
-              onBlur={handleBlur}
+              onBlur={() => setFocus(false)}
               onChange={handleChangeQuery}
               className="w-full bg-transparent p-2 text-neutral-50 outline-none transition-all focus:border-teal-400"
             />
