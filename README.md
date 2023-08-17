@@ -1,28 +1,36 @@
-# Create T3 App
+# Wayl
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
-
-## What's next? How do I make an app with this?
-
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
-
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
-
-- [Next.js](https://nextjs.org)
-- [NextAuth.js](https://next-auth.js.org)
-- [Prisma](https://prisma.io)
-- [Tailwind CSS](https://tailwindcss.com)
-- [tRPC](https://trpc.io)
-
-## Learn More
-
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+## Built with `npm create t3-app`
 
 - [Documentation](https://create.t3.gg/)
 - [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+## Available scripts
 
-## How do I deploy this?
+### `npm run dev`
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Run the app in development mode on port 3000.
+
+### `npm run build`
+
+Build minified, optimized and ready for deployment app to `.next` directory.
+
+### `npm start`
+
+Run bundle previously built with `npm run build` in production mode.
+
+### `npm run lint`
+
+Run linter for the whole project.
+
+### `npm run typecheck`
+
+Run TypeScript type check for the whole project.
+
+## Deployment
+
+The application is deployed using [Vercel](https://vercel.com). It supports two deployment modes.
+
+- **Production**  — push your code directly to `master` branch or create a pull request and merge it to `master` branch.
+
+- **Preview** — push your code to a new branch and create a pull request. New url will be generated and code from your branch will be deployed to it.
