@@ -52,7 +52,7 @@ const SongSearchResults = ({ songs, onSelect }: SongSearchResultsProps) => {
     e.stopPropagation();
     e.nativeEvent.stopImmediatePropagation();
 
-    if (audio.current === song.id) return audio.switch();
+    if (audio.songId === song.id) return audio.switch();
     audio.play(song);
   };
 
@@ -78,11 +78,11 @@ const SongSearchResults = ({ songs, onSelect }: SongSearchResultsProps) => {
         </div>
         <button
           disabled={!song.preview_url}
-          title={audio.playing && audio.current === song.id ? 'Pause' : 'Play'}
+          title={audio.isPlaying && audio.songId === song.id ? 'Pause' : 'Play'}
           onMouseDown={(e) => handlePreview(e, song)}
           className="p-2 text-neutral-50 transition-colors hover:text-teal-400 disabled:text-neutral-700"
         >
-          {audio.playing && audio.current === song.id ? (
+          {audio.isPlaying && audio.songId === song.id ? (
             <IoPause className="text-xl" />
           ) : (
             <IoPlay className="text-xl" />
@@ -96,7 +96,7 @@ const SongSearchResults = ({ songs, onSelect }: SongSearchResultsProps) => {
 const Header = () => {
   const [query, setQuery] = useState('');
   const [song, setSong] = useState<SpotifySong | null>(null);
-  const [focus, setFocus] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const theme = api.themes.getActive.useQuery();
   const userSong = api.songs.getForCurrentUserAndTheme.useQuery();
   const songs = api.spotify.getSongs.useQuery({ query }, { keepPreviousData: true });
@@ -146,8 +146,8 @@ const Header = () => {
               placeholder="Find a song..."
               value={query}
               required
-              onFocus={() => setFocus(true)}
-              onBlur={() => setFocus(false)}
+              onFocus={() => setIsInputFocused(true)}
+              onBlur={() => setIsInputFocused(false)}
               onChange={handleChangeQuery}
               className="w-full bg-transparent p-2 text-neutral-50 outline-none transition-all focus:border-teal-400"
             />
@@ -161,7 +161,7 @@ const Header = () => {
           </form>
         </If>
       </header>
-      <If cond={focus && query}>
+      <If cond={isInputFocused && query}>
         <div className="relative flex w-full justify-center">
           <div className="absolute top-0"></div>
           <ul className="absolute top-0 flex max-h-64 w-1/2 min-w-2xs flex-col overflow-y-scroll rounded-lg bg-black outline outline-1 outline-teal-400">
@@ -187,7 +187,7 @@ interface FeedSongProps {
 
 export const FeedSong = ({ song }: FeedSongProps) => {
   const player = usePlayer();
-  const isPlaying = useMemo(() => player.isPlaying && song.id === player.id, [song, player]);
+  const isPlaying = useMemo(() => player.isPlaying && song.id === player.songId, [song, player]);
   const anchorId = `${song.user.id}-anchor`;
 
   return (
@@ -217,8 +217,8 @@ export const FeedSong = ({ song }: FeedSongProps) => {
         </div>
       </div>
       <div className="flex items-center gap-4 p-4">
-        <div className="flex w-full items-center justify-between text-right">
-          <div className="flex flex-col break-words">
+        <div className="flex w-full items-center justify-between">
+          <div className="flex flex-col items-end break-words">
             <span
               data-playing={isPlaying}
               className="font-semibold leading-5 transition-colors group-hover:text-teal-400 data-[playing=true]:text-teal-400"

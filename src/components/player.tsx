@@ -22,7 +22,7 @@ export const Player = () => {
       play={player.isPlaying}
       callback={callback}
       token={token.data}
-      uris={player.uri ? [player.uri] : []}
+      uris={player.songUri ? [player.songUri] : []}
       showSaveIcon
       hideAttribution={true}
       styles={{

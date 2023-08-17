@@ -23,7 +23,7 @@ export const UserTooltip = (props: UserTooltipProps) => {
   const trpc = api.useContext();
   const followers = api.users.getFollowersById.useQuery({ id: props.id });
 
-  const followed = useMemo(
+  const isFollowed = useMemo(
     () => userId && followers.data?.some(({ id }) => id === userId),
     [userId, followers],
   );
@@ -59,9 +59,9 @@ export const UserTooltip = (props: UserTooltipProps) => {
   });
 
   const handleFollow = useCallback(() => {
-    const toggleFollow = followed ? unfollow : follow;
+    const toggleFollow = isFollowed ? unfollow : follow;
     toggleFollow.mutate({ id: props.id });
-  }, [props.id, followed, follow, unfollow]);
+  }, [props.id, isFollowed, follow, unfollow]);
 
   return (
     <Tooltip
@@ -89,10 +89,10 @@ export const UserTooltip = (props: UserTooltipProps) => {
         <If cond={userId !== props.id}>
           <button
             onClick={handleFollow}
-            title={followed ? 'Unfollow' : 'Follow'}
+            title={isFollowed ? 'Unfollow' : 'Follow'}
             className="rounded-lg p-2 text-2xl text-neutral-50 transition-colors hover:bg-neutral-900 hover:text-teal-400"
           >
-            {followed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
+            {isFollowed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
           </button>
         </If>
       </div>

@@ -6,8 +6,8 @@ export const usePlayer = () => {
   const pause = () => player?.setIsPlaying(false);
   const play = (id: number, uri: string) => {
     player?.setIsPlaying(true);
-    player?.setId(id);
-    player?.setUri(uri);
+    player?.setSongId(id);
+    player?.setSongUri(uri);
   };
 
   return {

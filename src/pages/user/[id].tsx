@@ -21,10 +21,7 @@ interface SongProps {
 
 export const FeedSong = ({ song }: SongProps) => {
   const player = usePlayer();
-  const isPlaying = useMemo(
-    () => player.isPlaying && song.id === player.id,
-    [song, player.id, player.isPlaying],
-  );
+  const isPlaying = useMemo(() => player.isPlaying && song.id === player.songId, [song, player]);
 
   return (
     <li className="group flex items-center justify-between transition-colors hover:bg-neutral-900">
@@ -67,10 +64,10 @@ export const FeedSong = ({ song }: SongProps) => {
           </div>
         </div>
       </div>
-      <div className="hidden items-center gap-4 py-4 pr-4 text-right sm:flex">
+      <div className="hidden items-center gap-4 py-4 pr-4 sm:flex">
         <div className="w-full">
-          <div className="flex flex-col break-words">
-            <span className="w-fit font-semibold leading-5 first-letter:capitalize group-hover:text-teal-400">
+          <div className="flex flex-col items-end break-words">
+            <span className="w-fit text-right font-semibold leading-5 first-letter:capitalize group-hover:text-teal-400">
               {song.theme.content}
             </span>
             <span className="break-words text-xs text-neutral-50">
@@ -90,7 +87,7 @@ const UserProfile: NextPage<{ id: string }> = ({ id }) => {
   const user = api.users.getById.useQuery({ id });
   const songs = api.songs.getByUserId.useQuery({ id });
 
-  const followed = useMemo(
+  const isFollowed = useMemo(
     () => userId && user.data?.followers.some(({ id }) => id === userId),
     [userId, user],
   );
@@ -126,9 +123,9 @@ const UserProfile: NextPage<{ id: string }> = ({ id }) => {
   });
 
   const handleFollow = useCallback(() => {
-    const toggleFollow = followed ? unfollow : follow;
+    const toggleFollow = isFollowed ? unfollow : follow;
     toggleFollow.mutate({ id });
-  }, [id, followed, follow, unfollow]);
+  }, [id, isFollowed, follow, unfollow]);
 
   return (
     <>
@@ -137,10 +134,10 @@ const UserProfile: NextPage<{ id: string }> = ({ id }) => {
           <If cond={user.data && userId !== id}>
             <button
               onClick={handleFollow}
-              title={followed ? 'Unfollow' : 'Follow'}
+              title={isFollowed ? 'Unfollow' : 'Follow'}
               className="absolute right-4 top-4 rounded-lg border border-teal-400 p-2 text-2xl text-neutral-50 transition-colors hover:bg-neutral-900 hover:text-teal-400"
             >
-              {followed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
+              {isFollowed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
             </button>
           </If>
           {user.data ? (

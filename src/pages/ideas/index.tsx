@@ -24,7 +24,7 @@ interface FeedIdeaProps {
 
 export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   const { userId } = useAuth();
-  const [hover, setHover] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const trpc = api.useContext();
   const user = api.users.current.get.useQuery();
   const anchorId = `${idea.authorId}-${idea.id}-anchor`;
@@ -45,13 +45,11 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
     },
   });
 
-  const onSettled = async () => {
-    await Promise.all([trpc.ideas.getLiked.invalidate(), trpc.ideas.getLatest.invalidate()]);
-  };
-
   const like = api.ideas.like.useMutation({
-    onSettled,
     onError: (error) => toast.error(error.message || 'Something went wrong 💀'),
+    onSettled: () => {
+      return Promise.all([trpc.ideas.getLiked.invalidate(), trpc.ideas.getLatest.invalidate()]);
+    },
     onMutate: async () => {
       if (!userId) return;
 
@@ -70,8 +68,10 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
   });
 
   const unlike = api.ideas.unlike.useMutation({
-    onSettled,
     onError: (error) => toast.error(error.message || 'Something went wrong 💀'),
+    onSettled: () => {
+      return Promise.all([trpc.ideas.getLiked.invalidate(), trpc.ideas.getLatest.invalidate()]);
+    },
     onMutate: async () => {
       if (!userId) return;
 
@@ -91,16 +91,16 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
     },
   });
 
-  const liked = useMemo(
+  const isLiked = useMemo(
     () => userId && idea.upvoters.some(({ id }) => id === userId),
     [idea, userId],
   );
 
   const handleLike = useCallback(() => {
-    setHover(false);
-    const toggleLike = liked ? unlike : like;
+    setIsHovered(false);
+    const toggleLike = isLiked ? unlike : like;
     toggleLike.mutate({ id: idea.id });
-  }, [idea, liked, like, unlike]);
+  }, [idea, isLiked, like, unlike]);
 
   const handleAccept = () => accept.mutate({ id: idea.id, content: idea.content });
   const handleRemove = () => remove.mutate({ id: idea.id });
@@ -127,12 +127,12 @@ export const FeedIdea = ({ idea }: FeedIdeaProps) => {
         <span>{idea.upvoters.length}</span>
         <button
           onClick={handleLike}
-          title={liked ? 'Unlike' : 'Like'}
-          onMouseOver={() => setHover(true)}
-          onMouseOut={() => setHover(false)}
+          title={isLiked ? 'Unlike' : 'Like'}
+          onMouseOver={() => setIsHovered(true)}
+          onMouseOut={() => setIsHovered(false)}
           className="group/like flex items-center rounded-lg p-2 text-2xl transition-colors hover:bg-black"
         >
-          <LikeIcon liked={liked} hover={hover} />
+          <LikeIcon isLiked={isLiked} isHovered={isHovered} />
         </button>
         <If cond={user.data?.roles.includes('ADMIN')}>
           <button

@@ -66,15 +66,15 @@ const UserSearchResult = ({ user, query, onSuccess }: UserSearchResultProps) => 
     },
   });
 
-  const followed = useMemo(
+  const isFollowed = useMemo(
     () => userId && user.followers.some(({ id }) => id === userId),
     [userId, user],
   );
 
   const handleFollow = useCallback(() => {
-    const toggleFollow = followed ? unfollow : follow;
+    const toggleFollow = isFollowed ? unfollow : follow;
     toggleFollow.mutate({ id: user.id });
-  }, [user, followed, follow, unfollow]);
+  }, [user, isFollowed, follow, unfollow]);
 
   return (
     <li className="flex items-center gap-4 p-4 transition-colors hover:bg-neutral-900 hover:text-teal-400">
@@ -102,10 +102,10 @@ const UserSearchResult = ({ user, query, onSuccess }: UserSearchResultProps) => 
         </div>
         <button
           onClick={handleFollow}
-          title={followed ? 'Unfollow' : 'Follow'}
+          title={isFollowed ? 'Unfollow' : 'Follow'}
           className="rounded-lg p-2 text-2xl text-neutral-50 transition-colors hover:bg-black hover:text-teal-400"
         >
-          {followed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
+          {isFollowed ? <MdPersonRemoveAlt1 /> : <MdPersonAddAlt1 />}
         </button>
       </div>
     </li>
