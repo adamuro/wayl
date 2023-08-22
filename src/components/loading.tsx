@@ -1,11 +1,14 @@
+import { type ClassValue } from 'clsx';
+import { cn } from '~/utils/cn';
+
 interface LoadingSpinnerProps {
   size?: number;
-  className?: string;
+  className?: ClassValue;
 }
 
 export const LoadingSpinner = (props: LoadingSpinnerProps) => {
   return (
-    <div role="status" className={props.className}>
+    <div role="status" className={cn(props.className)}>
       <svg
         aria-hidden="true"
         className={`animate-spin cursor-default fill-teal-400 text-neutral-50`}

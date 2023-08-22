@@ -7,6 +7,7 @@ import { FaLightbulb, FaRegLightbulb } from 'react-icons/fa';
 import { MdPeople, MdPeopleOutline } from 'react-icons/md';
 import { useDevice } from '~/hooks/device';
 import { useRefPosition } from '~/hooks/position';
+import { Logo } from './logo';
 import { Path } from './path';
 import { Player } from './player';
 
@@ -48,6 +49,22 @@ const Navigation = () => {
   return (
     <nav className="sticky top-0 h-screen flex-1 flex-col items-end">
       <ul className="ml-auto flex w-fit flex-col gap-1 p-2 text-xl">
+        <li>
+          <Logo className="w-full justify-center p-2" />
+        </li>
+        <NavigationItem name="Home" path="/" IconFill={AiFillHome} IconOutline={AiOutlineHome} />
+        <NavigationItem
+          name="Follows"
+          path="/follows"
+          IconFill={MdPeople}
+          IconOutline={MdPeopleOutline}
+        />
+        <NavigationItem
+          name="Ideas"
+          path="/ideas"
+          IconFill={FaLightbulb}
+          IconOutline={FaRegLightbulb}
+        />
         <li
           ref={userButtonRef}
           onPointerEnter={updatePosition}
@@ -70,19 +87,6 @@ const Navigation = () => {
             }}
           />
         </li>
-        <NavigationItem name="Home" path="/" IconFill={AiFillHome} IconOutline={AiOutlineHome} />
-        <NavigationItem
-          name="Follows"
-          path="/follows"
-          IconFill={MdPeople}
-          IconOutline={MdPeopleOutline}
-        />
-        <NavigationItem
-          name="Ideas"
-          path="/ideas"
-          IconFill={FaLightbulb}
-          IconOutline={FaRegLightbulb}
-        />
       </ul>
     </nav>
   );
